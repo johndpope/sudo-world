@@ -13,9 +13,12 @@
 		8DA46C062025210600577308 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DA46C042025210600577308 /* Main.storyboard */; };
 		8DA46C082025210600577308 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DA46C072025210600577308 /* Assets.xcassets */; };
 		8DA46C0B2025210600577308 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DA46C092025210600577308 /* LaunchScreen.storyboard */; };
+		FF8FF47D9BE19B3753BBB62D /* Pods_ARWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF0F3A6677EB24016E23796 /* Pods_ARWorld.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		58C51BD5BA8A34F0C53DB69D /* Pods-ARWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARWorld.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ARWorld/Pods-ARWorld.debug.xcconfig"; sourceTree = "<group>"; };
+		7DF0F3A6677EB24016E23796 /* Pods_ARWorld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARWorld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DA46BFB2025210600577308 /* ARWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DA46BFE2025210600577308 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DA46C002025210600577308 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -24,6 +27,7 @@
 		8DA46C072025210600577308 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8DA46C0A2025210600577308 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8DA46C0C2025210600577308 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F5F1FF02876CD5800BC6D4F4 /* Pods-ARWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARWorld.release.xcconfig"; path = "Pods/Target Support Files/Pods-ARWorld/Pods-ARWorld.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +35,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF8FF47D9BE19B3753BBB62D /* Pods_ARWorld.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		80A2509B0E48B671C2AEC95F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7DF0F3A6677EB24016E23796 /* Pods_ARWorld.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		8DA46BF22025210600577308 = {
 			isa = PBXGroup;
 			children = (
 				8DA46BFD2025210600577308 /* ARWorld */,
 				8DA46BFC2025210600577308 /* Products */,
+				A1A0C0DC31D8C3DF3DD7F7B2 /* Pods */,
+				80A2509B0E48B671C2AEC95F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +82,15 @@
 			path = ARWorld;
 			sourceTree = "<group>";
 		};
+		A1A0C0DC31D8C3DF3DD7F7B2 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				58C51BD5BA8A34F0C53DB69D /* Pods-ARWorld.debug.xcconfig */,
+				F5F1FF02876CD5800BC6D4F4 /* Pods-ARWorld.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -74,9 +98,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8DA46C0F2025210600577308 /* Build configuration list for PBXNativeTarget "ARWorld" */;
 			buildPhases = (
+				BA2AEF285536EBF14A06F6F9 /* [CP] Check Pods Manifest.lock */,
 				8DA46BF72025210600577308 /* Sources */,
 				8DA46BF82025210600577308 /* Frameworks */,
 				8DA46BF92025210600577308 /* Resources */,
+				2107397DB639A98A2E3C83E4 /* [CP] Embed Pods Frameworks */,
+				23E2C197F8173C2FAB68B698 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -134,6 +161,62 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2107397DB639A98A2E3C83E4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-ARWorld/Pods-ARWorld-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ARWorld/Pods-ARWorld-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		23E2C197F8173C2FAB68B698 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ARWorld/Pods-ARWorld-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BA2AEF285536EBF14A06F6F9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ARWorld-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8DA46BF72025210600577308 /* Sources */ = {
@@ -276,6 +359,7 @@
 		};
 		8DA46C102025210600577308 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 58C51BD5BA8A34F0C53DB69D /* Pods-ARWorld.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -291,6 +375,7 @@
 		};
 		8DA46C112025210600577308 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F5F1FF02876CD5800BC6D4F4 /* Pods-ARWorld.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
