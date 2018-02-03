@@ -79,16 +79,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         globalNode.addChildNode(axisNode)
     }
 
-
-    
     func configSceneView(sceneView: ARSCNView) {
         sceneView.delegate = self
         sceneView.showsStatistics = true
         sceneView.debugOptions  = [.showConstraints, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
     }
 
-
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         sceneView.session.run(configuration)
