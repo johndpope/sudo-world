@@ -20,6 +20,9 @@ enum InteractionMode {
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
+    @IBOutlet weak var menuCollectionView: MenuCollectionView!
+    
+    
     
     var floorAnchor: ARPlaneAnchor? // The floor the user uses to calibrate at the start
     var globalNode = GlobalNodeClass() // Anchored on start of the real life arrow
@@ -332,10 +335,4 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
         self.sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }
-}
-
-
-struct SceneNodeData {
-    var name: String
-    var transform: SCNMatrix4
 }

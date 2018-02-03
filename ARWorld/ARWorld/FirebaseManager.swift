@@ -27,7 +27,7 @@ struct FirebaseManager {
 
     func testDB() {
         observeOnDelegate(nil)
-        var node = insertNode(type: NodeAssetType.plane, transform: SCNMatrix4Identity)
+        var node = insertNode(type: NodeAssetType.blueBox, transform: SCNMatrix4Identity)
         node.transform.m12 = 1234
         updateNode(node: node)
         deleteNode(node: node)

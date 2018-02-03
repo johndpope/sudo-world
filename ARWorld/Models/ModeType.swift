@@ -14,6 +14,10 @@ enum NodeAssetType: String {
     case wolf = "wolf"
     case blueBox = "blueBox"
     
+    static func assetTypesForMenu() -> [NodeAssetType] {
+        return [.wolf, .blueBox, .wolf, .blueBox,]
+    }
+    
     static func getType(typeName: String) -> NodeAssetType {
         switch typeName {
         case NodeAssetType.wolf.rawValue:
@@ -41,9 +45,14 @@ enum NodeAssetType: String {
         return node
     }
     
-    //    func className() -> String {
-    //        return String(describing: self)
-    //    }
+    func menuImage() -> UIImage {
+        switch self {
+        case .wolf:
+            return #imageLiteral(resourceName: "grass")
+        case .blueBox:
+            return #imageLiteral(resourceName: "grass")
+        }
+    }
 }
 
 struct RootScene {
