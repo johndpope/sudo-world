@@ -152,7 +152,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     func addSCNNodeToAllSceneNodes(node: SCNNode) {
         if let name = node.name {
-            let sceneNode = FirebaseManager.shared.insertNode(type: NodeAssetType(rawValue: name)!, transform: node.transform)
+            let sceneNode = FirebaseManager.shared.insertNode(type: currentNodeTypeBeingAdded, transform: node.transform)
             allSceneNodes?.append(sceneNode)
         }
     }
@@ -404,7 +404,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         node.load()
 
         // Position scene
-        node.name = assetType
+        node.name = currentNodeTypeBeingAdded.rawValue
         node.transform = transform
 
         return node
