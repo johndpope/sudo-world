@@ -74,16 +74,23 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         mode = .waitingForAnchorLocation
         floorAnchor = nil
-        
+
         globalNode.addChildNode(hitTestPlane)
         globalNode.addChildNode(axisNode)
+
+        // Set the scene to the view
+        sceneView.scene = scene
     }
+
+
     
     func configSceneView(sceneView: ARSCNView) {
         sceneView.delegate = self
         sceneView.showsStatistics = true
         sceneView.debugOptions  = [.showConstraints, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
     }
+
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
