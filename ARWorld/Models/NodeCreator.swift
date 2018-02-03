@@ -11,64 +11,29 @@ import SceneKit
 import ARKit
 
 class GlobalNodeClass: SCNNode {
-    private var boxGeometry = SCNBox(width: 0.3, height: 0.02, length: 0.02, chamferRadius: 0.01)
-    
-    private let boxNode = SCNNode()
-    private var newBoxOrangeGeometry = SCNBox(width: 0.3, height: 0.03, length: 0.03, chamferRadius: 0.01)
-    
-//    let axisNode = NodeCreator.createAxesNode(quiverLength: 0.3, quiverThickness: 0.01)
+    private let calibrationArrowNode = SCNNode()
+    private var calibrationArrowGeometry = SCNBox(width: 0.3, height: 0.03, length: 0.03, chamferRadius: 0.01)
 
-    
     override init() {
         super.init()
         
-        self.geometry = boxGeometry
-        self.geometry?.firstMaterial = SCNMaterial.material(withDiffuse: UIColor.purple, respondsToLighting: false)
-        
-        newBoxOrangeGeometry.firstMaterial = SCNMaterial.material(withDiffuse: UIColor.orange, respondsToLighting: false)
-        boxNode.geometry = newBoxOrangeGeometry
-        self.addChildNode(boxNode)
-        
-        // this basically doesn't show up why
-//        self.addChildNode(axisNode)
-        
-        
-//        self.addChildNode(boxNode)
-//        self.addChildNode(NodeCreator.blueBox)
+        resetCalibrationVisualizer()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setAttachedGeometryWidth(endpointInWorld: SCNVector3, newWidth: Float) {
-        func average(_ a: Float, b: Float) -> Float {
-            return (a + b) / 2
-        }
-        
-        boxGeometry.width = CGFloat(newWidth)
-        
-        newBoxOrangeGeometry.width = CGFloat(newWidth)
-        
-        boxNode.position = SCNVector3(x: newWidth / 2, y: 0, z: 0)
-        
-//        let startpointInWorld = boxNode.position
-        
-//        let centerOfStartAndEnd = (startpointInWorld + endpointInWorld) / 2
-        
-//        boxNode.position = centerOfStartAndEnd
-        
-        
-        //boxNode.pivot
-        
-        
-//        var (min, max) = boundingBox
-//        min.setAxis(.x, to: newWidth)
-//        max.setAxis(.x, to: newWidth)
-//        resizeTo(min: min, max: max)
+    func resetCalibrationVisualizer() {
+        calibrationArrowGeometry.firstMaterial = SCNMaterial.material(withDiffuse: UIColor.orange, respondsToLighting: false)
+        calibrationArrowNode.geometry = calibrationArrowGeometry
+        self.addChildNode(calibrationArrowNode)
     }
-
     
+    func setAttachedGeometryWidth(endpointInWorld: SCNVector3, newWidth: Float) {
+        calibrationArrowGeometry.width = CGFloat(newWidth)
+        calibrationArrowNode.position = SCNVector3(x: newWidth / 2, y: 0, z: 0)
+    }
 }
 
 struct NodeCreator {

@@ -13,7 +13,8 @@ import ARKit
 enum InteractionMode {
     case waitingForAnchorLocation
     case draggingAnchorDirection
-    case settingObjects
+    case waitingForSettingNewObject
+//    case draggingNewObject
 }
 
 class ViewController: UIViewController, ARSCNViewDelegate {
@@ -24,6 +25,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var globalNode = GlobalNodeClass() // Anchored on start of the real life arrow
     var hitTestPlane = SCNNode()
     var panGesture: UIPanGestureRecognizer!
+    var tapGesture: UITapGestureRecognizer!
 
     var currentNodeBeingAdded: SCNNode?
     
@@ -39,7 +41,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 hitTestPlane.boundingBox.min = SCNVector3(x: -1000, y: 0, z: -1000)
                 hitTestPlane.boundingBox.max = SCNVector3(x: 1000, y: 0, z: 1000)
                 
-            case .settingObjects:
+            case .waitingForSettingNewObject:
                 break
             }
         }
@@ -57,6 +59,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         sceneView.addGestureRecognizer(panGesture)
+        
+        tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        sceneView.addGestureRecognizer(panGesture)
 
         resetNodes()
     }
@@ -66,7 +71,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         globalNode.isHidden = true
 
         sceneView.scene.rootNode.addChildNode(globalNode)
-//        globalNode.resizeTo(min: .zero, max: .zero)
         
         mode = .waitingForAnchorLocation
         floorAnchor = nil
@@ -78,7 +82,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func configSceneView(sceneView: ARSCNView) {
         sceneView.delegate = self
         sceneView.showsStatistics = true
-        sceneView.debugOptions  = [.showConstraints, .showLightExtents, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
+        sceneView.debugOptions  = [.showConstraints, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -93,14 +97,43 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     // MARK: - Touch handling
     
+    @objc dynamic func handleTap(_ gestureRecognizer: UITapGestureRecognizer) {
+        switch mode {
+        case .waitingForAnchorLocation:
+            break
+        case .draggingAnchorDirection:
+            break
+        case .waitingForSettingNewObject:
+            setObject(gestureRecognizer)
+            break
+        }
+    }
+    
     @objc dynamic func handlePan(_ gestureRecognizer: UIPanGestureRecognizer) {
         switch mode {
         case .waitingForAnchorLocation:
             findStartingLocation(gestureRecognizer)
         case .draggingAnchorDirection:
             handleInitialCalibrationDrag(gestureRecognizer)
-        case .settingObjects:
+        case .waitingForSettingNewObject:
             break
+        }
+    }
+    
+    func setObject(_ gestureRecognizer: UITapGestureRecognizer) {
+        let touchPos = gestureRecognizer.location(in: sceneView)
+        let hit = realWorldHit(at: touchPos)
+        if let startPos = hit.position {
+            if let clonedNode = currentNodeBeingAdded?.clone() {
+                globalNode.addChildNode(clonedNode)
+                clonedNode.position = startPos
+                
+//                let
+                
+//                clonedNode.position = SCNVector3(0.1, 0.1, 0.1)
+                
+                
+            }
         }
     }
     
@@ -113,19 +146,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             let touchPos = gestureRecognizer.location(in: sceneView)
             let hit = realWorldHit(at: touchPos)
             if let startPos = hit.position, let plane = hit.planeAnchor {
-                
                 // Once the user hits a usable real-world plane, switch into line-dragging mode
                 globalNode.isHidden = false
                 globalNode.position = startPos
                 floorAnchor = plane
                 mode = .draggingAnchorDirection
-//
-//                let newNode = NodeCreator.orangeBox
-//                globalNode.addChildNode(newNode)
-//                newNode.transform = SCNMatrix4MakeTranslation(startPos.x, startPos.y, startPos.z)
-                
-//                axisNode.transform = SCNMatrix4Identity
-
             }
         default:
             break
@@ -135,31 +160,20 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func handleInitialCalibrationDrag(_ gestureRecognizer: UIPanGestureRecognizer) {
         switch gestureRecognizer.state {
         case .changed:
-//            print("gesture rec CHANGED")
-
+            
             let touchPos = gestureRecognizer.location(in: sceneView)
             if let hitTestlocationInWorld = scenekitHit(at: touchPos, within: hitTestPlane) {
-//                // This drags a line out that determines the box's width and its orientation:
-//                // The box's front will face 90 degrees clockwise out from the line being dragged.
                 let delta = globalNode.position - hitTestlocationInWorld
                 let distance = delta.length
-
                 let angleInRadians = atan2(delta.z, delta.x)
-
                 self.globalNode.setAttachedGeometryWidth(endpointInWorld: hitTestlocationInWorld, newWidth: distance)
-                
-//                print("touch pos \(hitTestlocationInWorld)")
-                
-                
                globalNode.rotation = SCNVector4(x: 0, y: 1, z: 0, w: -(angleInRadians + Float.pi))
-                
-//                globalNode.transform = SCNMatrix4Translate(globalNode.transform, delta.x, delta.y, delta.z)
-                
-                print("new global position \(globalNode.position)")
             }
         case .ended, .cancelled:
             print("gesture rec ENDED OR CANCELED")
 
+            // TODO if we have time
+            // Check that the length is around the same length as our physical arrow
 //            if abs(globalNode.boundingBox.max.x - globalNode.boundingBox.min.x) >= globalNode.minLabelDistanceThreshold {
 //                // If the box ended up with a usable width, switch to length-dragging mode.
 //                mode = .draggingInitialLength
@@ -247,9 +261,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // Override to create and configure nodes for anchors added to the view's session.
 //    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
 //        guard let planeAnchor = anchor as? ARPlaneAnchor else { return nil }
-//
-//
-//
 //    }
     
 //    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
@@ -259,14 +270,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
         print("didAdd \(node.position)")
 
-        let planeNode: SCNNode
-//        if globalNode == nil {
-//            planeNode = NodeCreator.greenPlane(anchor: planeAnchor)
-//            globalNode = planeNode
-//        } else {
-            planeNode = NodeCreator.bluePlane(anchor: planeAnchor)
-//        }
-
+        let planeNode = NodeCreator.bluePlane(anchor: planeAnchor)
+        
         // ARKit owns the node corresponding to the anchor, so make the plane a child node.
         node.addChildNode(planeNode)
     }
@@ -287,9 +292,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 //            let delta = newPos - oldPos
 //            globalNode.position += delta
 //        }
-        
-//        let oldPivot = node.pivot
-//        node.pivot = SCNMatrix4Translate(oldPivot, -planeAnchor.center.x, -planeAnchor.center.y, -planeAnchor.center.z)
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {//
@@ -299,16 +301,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // MARK: IB Actions
     @IBAction func boxButtonTapped(_ sender: UIButton) {
         let newBox = NodeCreator.orangeBox
-        newBox.position = SCNVector3(0.1, 0.1, 0.1)
-        globalNode.addChildNode(newBox)
-        
-        let newBox2 = NodeCreator.greenBox
-//        newBox2.position = SCNVector3(, 0.1, 0.1)
-        globalNode.addChildNode(newBox2)
+        currentNodeBeingAdded = newBox
     }
     
     @IBAction func resetButtonTapped(_ sender: Any) {
         self.restartSession()
+    }
+    
+    @IBAction func calibrationCompleteButton(_ sender: Any) {
+        if mode == .draggingAnchorDirection {
+            mode = .waitingForSettingNewObject
+        }
     }
     
     private func restartSession() {
@@ -318,6 +321,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
         
         resetNodes()
+        
 
         self.sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }
