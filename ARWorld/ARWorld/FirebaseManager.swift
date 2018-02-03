@@ -66,7 +66,7 @@ struct FirebaseManager {
     }
 
     func observeOnDelegate(_ delegate: FirebaseManagerDelegate?){
-
+        //TODO: block might be out of scope
         db.child(FirebaseManager.modelsTableName).observe(.childAdded, with: { (snapshot) -> Void in
             if let nodeData = snapshot.value as? [String : AnyObject] {
                 delegate?.didAddNode(
@@ -121,10 +121,11 @@ struct FirebaseManager {
     static func getSceneNodes(databaseSnapshot: [String : [String : AnyObject]]) -> Array<SceneNode> {
         var listOfSceneNodes: Array<SceneNode> = Array()
 
-        if let models = databaseSnapshot["models"] {
+        if let models = databaseSnapshot[FirebaseManager.modelsTableName] {
             for (modelID, modelData) in models {
                 let modelDataAsDictionary = modelData as? [String : AnyObject]
                 let nodeType = modelDataAsDictionary![FirebaseManager.modelsTable_typeColumn] as? String
+                //TODO: remove unessary casting from NSarray and array
                 let nodeTransform = modelDataAsDictionary![FirebaseManager.modelsTable_transformColumn] as? NSArray
                 listOfSceneNodes.append(SceneNode(id: modelID, type: NodeAssetType.getType(typeName: nodeType!), transformAsArray: nodeTransform as! Array<Float>))
             }
