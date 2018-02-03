@@ -70,6 +70,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.addGestureRecognizer(tapGesture)
 
         resetNodes()
+        
+        menuCollectionView.menuCollectionDelegate = self
     }
     
     func resetNodes() {
@@ -334,5 +336,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         resetNodes()
 
         self.sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+    }
+}
+
+extension ViewController: MenuCollectionViewDelegate {
+    func didTapCell(assetType: NodeAssetType) {
+        print("did tap cell")
     }
 }

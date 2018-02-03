@@ -71,7 +71,7 @@ struct NodeCreator {
     }
     
     static var blueBox: SCNNode {
-        let box = SCNBox(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0)
+        let box = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)
         box.firstMaterial?.diffuse.contents = UIColor.blue
         
         let node = SCNNode()
