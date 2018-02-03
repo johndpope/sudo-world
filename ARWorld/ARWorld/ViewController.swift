@@ -74,10 +74,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         mode = .waitingForAnchorLocation
         floorAnchor = nil
-        
+
         globalNode.addChildNode(hitTestPlane)
         globalNode.addChildNode(axisNode)
+
+        // Set the scene to the view
+        sceneView.scene = scene
     }
+
+
     
     func configSceneView(sceneView: ARSCNView) {
         sceneView.delegate = self
