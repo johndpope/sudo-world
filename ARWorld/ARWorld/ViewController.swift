@@ -31,6 +31,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var tapGesture: UITapGestureRecognizer!
 
     var currentNodeBeingAdded: SCNNode?
+
+    var allSceneNodes = [SceneNode]()
     
     var allMenuAssets = [NodeAssetType]()
     var allNodesDisplayed = [SCNNode]() // Populated from firebase
@@ -342,5 +344,19 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 extension ViewController: MenuCollectionViewDelegate {
     func didTapCell(assetType: NodeAssetType) {
         print("did tap cell")
+    }
+}
+
+extension ViewController: FirebaseManagerDelegate {
+    func didAddNode(node: SceneNode) {
+        // add node on the scene
+    }
+    
+    func didChangeNode(node: SceneNode) {
+        // change node on the scene
+    }
+
+    func didRemoveNode(id: String) {
+        // remove node on the scene
     }
 }
