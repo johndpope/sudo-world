@@ -10,17 +10,15 @@ import Foundation
 import SceneKit
 
 protocol ModelType {
-    var name: String { get set }
-    
-    func node() -> SCNNode
+    static func initializeNode() -> SCNNode?
 }
 
 extension ModelType {
-    func node() -> SCNNode? {
+    static func initializeNode() -> SCNNode? {
         return RootScene.shared.rootNode.childNode(withName: className(), recursively: false)
     }
 
-    func className() -> String {
+    static func className() -> String {
         return String(describing: self)
     }
     
@@ -31,6 +29,11 @@ struct RootScene {
     let rootNode = SCNScene(named: "art.scnassets/ship.scn")!.rootNode
 }
 
+struct GlobalOriginNodeModel: ModelType {
+    
+}
 
-
+struct FloorModel: ModelType {
+    
+}
 

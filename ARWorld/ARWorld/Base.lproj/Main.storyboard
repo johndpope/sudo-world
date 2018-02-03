@@ -1,23 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" systemVersion="17A278a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController id="BV1-FR-VrT" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
-                    <arscnView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="BrB-h1-WRS">
+                <viewController id="BV1-FR-VrT" customClass="ViewController" customModule="ARWorld" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="QxG-Za-ZOF"/>
+                        <viewControllerLayoutGuide type="bottom" id="T4x-E7-a9t"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="nui-qi-li0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </arscnView>
+                        <subviews>
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lFG-ki-0fC">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </arscnView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SZb-f9-Bn8" userLabel="Box">
+                                <rect key="frame" x="192" y="606" width="80" height="30"/>
+                                <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="ddt-Xn-Z4k"/>
+                                    <constraint firstAttribute="height" constant="30" id="gzJ-HZ-dhm"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Box">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="boxButtonTapped:" destination="BV1-FR-VrT" eventType="touchUpInside" id="wqx-eT-8Hk"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MNu-y0-MCV" userLabel="Ship">
+                                <rect key="frame" x="74" y="606" width="80" height="30"/>
+                                <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="H1z-0E-9U9"/>
+                                    <constraint firstAttribute="height" constant="30" id="tYO-sO-iYJ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Ship">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="shipButtonTapped:" destination="BV1-FR-VrT" eventType="touchUpInside" id="GG4-XM-dhY"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="SZb-f9-Bn8" secondAttribute="trailing" constant="87" id="CC6-Vx-RUh"/>
+                            <constraint firstAttribute="bottom" secondItem="lFG-ki-0fC" secondAttribute="bottom" id="Fk2-JD-XHK"/>
+                            <constraint firstItem="T4x-E7-a9t" firstAttribute="top" secondItem="MNu-y0-MCV" secondAttribute="bottom" constant="31" id="Sxa-VE-1wO"/>
+                            <constraint firstItem="lFG-ki-0fC" firstAttribute="leading" secondItem="nui-qi-li0" secondAttribute="leading" id="Tu6-cR-NBu"/>
+                            <constraint firstItem="SZb-f9-Bn8" firstAttribute="leading" secondItem="MNu-y0-MCV" secondAttribute="trailing" constant="38" id="Zwe-kK-ldP"/>
+                            <constraint firstItem="SZb-f9-Bn8" firstAttribute="bottom" secondItem="MNu-y0-MCV" secondAttribute="bottom" id="iBc-jl-i8v"/>
+                            <constraint firstAttribute="trailing" secondItem="lFG-ki-0fC" secondAttribute="trailing" id="op9-rD-mM9"/>
+                            <constraint firstItem="lFG-ki-0fC" firstAttribute="top" secondItem="nui-qi-li0" secondAttribute="top" id="x28-qr-ztS"/>
+                        </constraints>
+                    </view>
                     <connections>
-                        <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
+                        <outlet property="sceneView" destination="lFG-ki-0fC" id="ZUz-GL-cO9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
