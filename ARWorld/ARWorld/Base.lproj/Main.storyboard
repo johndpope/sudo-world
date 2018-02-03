@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -25,47 +24,61 @@
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lFG-ki-0fC">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </arscnView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SZb-f9-Bn8" userLabel="Box">
-                                <rect key="frame" x="192" y="606" width="80" height="30"/>
-                                <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="TFl-2S-3sQ">
+                                <rect key="frame" x="0.0" y="539" width="375" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="0.38811001712328769" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="80" id="ddt-Xn-Z4k"/>
-                                    <constraint firstAttribute="height" constant="30" id="gzJ-HZ-dhm"/>
+                                    <constraint firstAttribute="height" constant="128" id="vm3-RW-kWP"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="Box">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ghl-8h-hMV">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="" id="zOV-jj-fgO">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </view>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hLA-YN-agn">
+                                <rect key="frame" x="27" y="465" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
                                 <connections>
-                                    <action selector="boxButtonTapped:" destination="BV1-FR-VrT" eventType="touchUpInside" id="wqx-eT-8Hk"/>
+                                    <action selector="boxButtonTapped:" destination="BV1-FR-VrT" eventType="touchUpInside" id="xpa-9x-Cd2"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MNu-y0-MCV" userLabel="Ship">
-                                <rect key="frame" x="74" y="606" width="80" height="30"/>
-                                <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ZD-Wn-6cP">
+                                <rect key="frame" x="325" y="30" width="40" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="80" id="H1z-0E-9U9"/>
-                                    <constraint firstAttribute="height" constant="30" id="tYO-sO-iYJ"/>
+                                    <constraint firstAttribute="height" constant="40" id="Pxs-W0-ejR"/>
+                                    <constraint firstAttribute="width" constant="40" id="oe8-55-orm"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="Ship">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
+                                <state key="normal" title="Button" image="reset-icon"/>
                                 <connections>
-                                    <action selector="shipButtonTapped:" destination="BV1-FR-VrT" eventType="touchUpInside" id="GG4-XM-dhY"/>
+                                    <action selector="resetButtonTapped:" destination="BV1-FR-VrT" eventType="touchUpInside" id="Opc-fs-dFg"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="SZb-f9-Bn8" secondAttribute="trailing" constant="87" id="CC6-Vx-RUh"/>
+                            <constraint firstItem="3ZD-Wn-6cP" firstAttribute="top" secondItem="QxG-Za-ZOF" secondAttribute="bottom" constant="10" id="5cm-q6-aNI"/>
                             <constraint firstAttribute="bottom" secondItem="lFG-ki-0fC" secondAttribute="bottom" id="Fk2-JD-XHK"/>
-                            <constraint firstItem="T4x-E7-a9t" firstAttribute="top" secondItem="MNu-y0-MCV" secondAttribute="bottom" constant="31" id="Sxa-VE-1wO"/>
                             <constraint firstItem="lFG-ki-0fC" firstAttribute="leading" secondItem="nui-qi-li0" secondAttribute="leading" id="Tu6-cR-NBu"/>
-                            <constraint firstItem="SZb-f9-Bn8" firstAttribute="leading" secondItem="MNu-y0-MCV" secondAttribute="trailing" constant="38" id="Zwe-kK-ldP"/>
-                            <constraint firstItem="SZb-f9-Bn8" firstAttribute="bottom" secondItem="MNu-y0-MCV" secondAttribute="bottom" id="iBc-jl-i8v"/>
+                            <constraint firstItem="T4x-E7-a9t" firstAttribute="top" secondItem="TFl-2S-3sQ" secondAttribute="bottom" id="UBS-gi-hmk"/>
+                            <constraint firstItem="TFl-2S-3sQ" firstAttribute="leading" secondItem="nui-qi-li0" secondAttribute="leading" id="WgQ-RQ-JOV"/>
+                            <constraint firstItem="hLA-YN-agn" firstAttribute="leading" secondItem="nui-qi-li0" secondAttribute="leading" constant="27" id="YsK-Hj-K04"/>
+                            <constraint firstItem="T4x-E7-a9t" firstAttribute="top" secondItem="hLA-YN-agn" secondAttribute="bottom" constant="172" id="fAg-dR-PmZ"/>
+                            <constraint firstAttribute="trailing" secondItem="3ZD-Wn-6cP" secondAttribute="trailing" constant="10" id="lna-AF-3JJ"/>
                             <constraint firstAttribute="trailing" secondItem="lFG-ki-0fC" secondAttribute="trailing" id="op9-rD-mM9"/>
                             <constraint firstItem="lFG-ki-0fC" firstAttribute="top" secondItem="nui-qi-li0" secondAttribute="top" id="x28-qr-ztS"/>
+                            <constraint firstAttribute="trailing" secondItem="TFl-2S-3sQ" secondAttribute="trailing" id="yj9-Kw-JLp"/>
                         </constraints>
                     </view>
                     <connections>
@@ -74,6 +87,10 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="36" y="33.733133433283363"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="reset-icon" width="277" height="277"/>
+    </resources>
 </document>

@@ -9,11 +9,11 @@
 import Foundation
 import SceneKit
 
-protocol ModelType {
+protocol _3DAssetType {
     static func initializeNode() -> SCNNode?
 }
 
-extension ModelType {
+extension _3DAssetType {
     static func initializeNode() -> SCNNode? {
         return RootScene.shared.rootNode.childNode(withName: className(), recursively: false)
     }
@@ -21,7 +21,7 @@ extension ModelType {
     static func className() -> String {
         return String(describing: self)
     }
-    
+
 }
 
 struct RootScene {
@@ -29,11 +29,6 @@ struct RootScene {
     let rootNode = SCNScene(named: "art.scnassets/ship.scn")!.rootNode
 }
 
-struct GlobalOriginNodeModel: ModelType {
-    
-}
+struct GlobalOriginNodeModel: _3DAssetType {}
 
-struct FloorModel: ModelType {
-    
-}
-
+struct ShipModel: _3DAssetType {}
