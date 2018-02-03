@@ -32,7 +32,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.scene = scene
 
         //Write identity as test
-        FirebaseManager.init().testDB()
+//        FirebaseManager.init().testDB()
     }
 
 
