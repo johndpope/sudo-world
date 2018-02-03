@@ -19,7 +19,9 @@
 		8DC4CFFE20257FB40004B627 /* NodeCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC4CFFD20257FB40004B627 /* NodeCreator.swift */; };
 		8DC4D00B2025AD8B0004B627 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC4D00A2025AD8B0004B627 /* Utilities.swift */; };
 		8DC4D00D2025ADBD0004B627 /* SCNVector3+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC4D00C2025ADBD0004B627 /* SCNVector3+Extensions.swift */; };
-		FF8FF47D9BE19B3753BBB62D /* Pods_ARWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF0F3A6677EB24016E23796 /* Pods_ARWorld.framework */; };
+		A7368FCF2025309D00BDC162 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A7368FCE2025309D00BDC162 /* GoogleService-Info.plist */; };
+		A7368FD120253DC800BDC162 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7368FD020253DC800BDC162 /* FirebaseManager.swift */; };
+		FF8FF47D9BE19B3753BBB62D /* Pods_ARWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF0F3A6677EB24016E23796 /* Pods_ARWorld.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +41,8 @@
 		8DC4CFFD20257FB40004B627 /* NodeCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeCreator.swift; sourceTree = "<group>"; };
 		8DC4D00A2025AD8B0004B627 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		8DC4D00C2025ADBD0004B627 /* SCNVector3+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SCNVector3+Extensions.swift"; sourceTree = "<group>"; };
+		A7368FCE2025309D00BDC162 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A7368FD020253DC800BDC162 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		F5F1FF02876CD5800BC6D4F4 /* Pods-ARWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARWorld.release.xcconfig"; path = "Pods/Target Support Files/Pods-ARWorld/Pods-ARWorld.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -109,7 +113,9 @@
 				8DA46C022025210600577308 /* ViewController.swift */,
 				8DA46C042025210600577308 /* Main.storyboard */,
 				8DA46C092025210600577308 /* LaunchScreen.storyboard */,
+				A7368FCE2025309D00BDC162 /* GoogleService-Info.plist */,
 				8DA46C0C2025210600577308 /* Info.plist */,
+				A7368FD020253DC800BDC162 /* FirebaseManager.swift */,
 			);
 			path = ARWorld;
 			sourceTree = "<group>";
@@ -205,6 +211,7 @@
 			files = (
 				8DA46C012025210600577308 /* art.scnassets in Resources */,
 				8DA46C0B2025210600577308 /* LaunchScreen.storyboard in Resources */,
+				A7368FCF2025309D00BDC162 /* GoogleService-Info.plist in Resources */,
 				8DA46C082025210600577308 /* Assets.xcassets in Resources */,
 				8DA46C062025210600577308 /* Main.storyboard in Resources */,
 			);
@@ -280,6 +287,7 @@
 				8DC4D00B2025AD8B0004B627 /* Utilities.swift in Sources */,
 				8DC4D00D2025ADBD0004B627 /* SCNVector3+Extensions.swift in Sources */,
 				8DC4CFFE20257FB40004B627 /* NodeCreator.swift in Sources */,
+				A7368FD120253DC800BDC162 /* FirebaseManager.swift in Sources */,
 				8DA46C032025210600577308 /* ViewController.swift in Sources */,
 				8D7283FB202531EB0099FAF3 /* SceneNode.swift in Sources */,
 				8DA46BFF2025210600577308 /* AppDelegate.swift in Sources */,

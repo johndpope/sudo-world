@@ -83,7 +83,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.delegate = self
         sceneView.showsStatistics = true
         sceneView.debugOptions  = [.showConstraints, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
+
     }
+
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
