@@ -61,7 +61,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.addGestureRecognizer(panGesture)
         
         tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        sceneView.addGestureRecognizer(panGesture)
+        sceneView.addGestureRecognizer(tapGesture)
 
         resetNodes()
     }
@@ -123,17 +123,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func setObject(_ gestureRecognizer: UITapGestureRecognizer) {
         let touchPos = gestureRecognizer.location(in: sceneView)
         let hit = realWorldHit(at: touchPos)
-        if let startPos = hit.position {
-            if let clonedNode = currentNodeBeingAdded?.clone() {
+        
+        if let worldToHitTest = hit.transformInWorld {
+            let clonedNode = NodeCreator.blueBox
                 globalNode.addChildNode(clonedNode)
-                clonedNode.position = startPos
+
+                let globalNodeToWorld = SCNMatrix4Invert(globalNode.transform)
+                let globalNodeToHitTest = SCNMatrix4Mult(worldToHitTest, globalNodeToWorld)
                 
-//                let
-                
-//                clonedNode.position = SCNVector3(0.1, 0.1, 0.1)
-                
-                
-            }
+                clonedNode.transform = globalNodeToHitTest
         }
     }
     
@@ -145,10 +143,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             // Use real-world ARKit coordinates to determine where to start drawing
             let touchPos = gestureRecognizer.location(in: sceneView)
             let hit = realWorldHit(at: touchPos)
-            if let startPos = hit.position, let plane = hit.planeAnchor {
+            if let hitTransformInWorld = hit.transformInWorld, let plane = hit.planeAnchor {
                 // Once the user hits a usable real-world plane, switch into line-dragging mode
                 globalNode.isHidden = false
-                globalNode.position = startPos
+                globalNode.transform = hitTransformInWorld
                 floorAnchor = plane
                 mode = .draggingAnchorDirection
             }
@@ -200,7 +198,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         return hits.first?.worldCoordinates
     }
     
-    func realWorldHit(at screenPos: CGPoint) -> (position: SCNVector3?, planeAnchor: ARPlaneAnchor?, hitAPlane: Bool) {
+    func realWorldHit(at screenPos: CGPoint) -> (transformInWorld: SCNMatrix4?, planeAnchor: ARPlaneAnchor?, hitAPlane: Bool) {
         
         // -------------------------------------------------------------------------------
         // 1. Always do a hit test against exisiting plane anchors first.
@@ -209,25 +207,28 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let planeHitTestResults = sceneView.hitTest(screenPos, types: .existingPlaneUsingExtent)
         if let result = planeHitTestResults.first {
             
-            let planeHitTestPosition = SCNVector3.positionFromTransform(result.worldTransform)
+//            let planeHitTestPosition = SCNVector3.positionFromTransform(result.worldTransform)
             let planeAnchor = result.anchor
             
             // Return immediately - this is the best possible outcome.
-            return (planeHitTestPosition, planeAnchor as? ARPlaneAnchor, true)
+            return (SCNMatrix4(result.worldTransform), planeAnchor as? ARPlaneAnchor, true)
         }
         
         // -------------------------------------------------------------------------------
         // 2. Collect more information about the environment by hit testing against
         //    the feature point cloud, but do not return the result yet.
         
-        var featureHitTestPosition: SCNVector3?
+        var featureHitTestTransform: SCNMatrix4?
         var highQualityFeatureHitTestResult = false
         
         let highQualityfeatureHitTestResults = sceneView.hitTestWithFeatures(screenPos, coneOpeningAngleInDegrees: 18, minDistance: 0.2, maxDistance: 2.0)
         
         if !highQualityfeatureHitTestResults.isEmpty {
             let result = highQualityfeatureHitTestResults[0]
-            featureHitTestPosition = result.position
+            
+            let sketchyResult = SCNMatrix4MakeTranslation(result.position.x, result.position.y, result.position.z)
+            
+            featureHitTestTransform = sketchyResult
             highQualityFeatureHitTestResult = true
         }
         
@@ -237,7 +238,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         //    infinite plane was hit.
         
         if highQualityFeatureHitTestResult {
-            return (featureHitTestPosition, nil, false)
+            return (featureHitTestTransform, nil, false)
         }
         
         // -------------------------------------------------------------------------------
@@ -247,7 +248,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let unfilteredFeatureHitTestResults = sceneView.hitTestWithFeatures(screenPos)
         if !unfilteredFeatureHitTestResults.isEmpty {
             let result = unfilteredFeatureHitTestResults[0]
-            return (result.position, nil, false)
+            
+            let sketchyResult = SCNMatrix4MakeTranslation(result.position.x, result.position.y, result.position.z)
+
+            return (sketchyResult, nil, false)
         }
         
         return (nil, nil, false)
@@ -310,6 +314,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     @IBAction func calibrationCompleteButton(_ sender: Any) {
         if mode == .draggingAnchorDirection {
+            print("waitingForSettingNewObject MODE")
             mode = .waitingForSettingNewObject
         }
     }
