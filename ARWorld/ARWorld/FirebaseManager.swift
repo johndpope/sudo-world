@@ -35,23 +35,22 @@ struct FirebaseManager {
 
     func insertNode(type: NodeAssetType, transform: SCNMatrix4)-> SceneNode {
         let key = db.child(FirebaseManager.modelsTableName).childByAutoId().key
-//        let post = [
-//            "id": key,
-//            FirebaseManager.modelsTable_typeColumn: type.rawValue,
-//            FirebaseManager.modelsTable_transformColumn: transform
-//            ]
-//        db.child(FirebaseManager.modelsTableName).childByAutoId().setValue(post)
+        let post = [
+            FirebaseManager.modelsTable_typeColumn: type.rawValue,
+            FirebaseManager.modelsTable_transformColumn: FirebaseManager.transformToArray(transform: transform)
+            ] as [String : Any]
+        db.child(FirebaseManager.modelsTableName).child(key).setValue(post)
 
 
-        db.child(FirebaseManager.modelsTableName)
-            .child(key)
-            .child(FirebaseManager.modelsTable_typeColumn)
-            .setValue(type.rawValue)
-
-        db.child(FirebaseManager.modelsTableName)
-            .child(key)
-            .child(FirebaseManager.modelsTable_transformColumn)
-            .setValue(FirebaseManager.transformToArray(transform: transform))
+//        db.child(FirebaseManager.modelsTableName)
+//            .child(key)
+//            .child(FirebaseManager.modelsTable_typeColumn)
+//            .setValue(type.rawValue)
+//
+//        db.child(FirebaseManager.modelsTableName)
+//            .child(key)
+//            .child(FirebaseManager.modelsTable_transformColumn)
+//            .setValue(FirebaseManager.transformToArray(transform: transform))
 
         return SceneNode(id: key, type: type, transform: transform)
     }
