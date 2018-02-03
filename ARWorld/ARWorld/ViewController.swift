@@ -22,18 +22,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet var sceneView: ARSCNView!
     @IBOutlet weak var menuCollectionView: MenuCollectionView!
     
-    
-    
     var floorAnchor: ARPlaneAnchor? // The floor the user uses to calibrate at the start
     var globalNode = GlobalNodeClass() // Anchored on start of the real life arrow
     var hitTestPlane = SCNNode()
     var panGesture: UIPanGestureRecognizer!
     var tapGesture: UITapGestureRecognizer!
 
-    var currentNodeBeingAdded: SCNNode?
-
-    var allSceneNodes: [SceneNode]?
+    var currentNodeTypeBeingAdded: NodeAssetType = .box
     
+    var allSceneNodes: [SceneNode]?
     var allMenuAssets = [NodeAssetType]()
 
     var allNodesDisplayed = [SCNNode]() // Populated from firebase
@@ -139,15 +136,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let hit = realWorldHit(at: touchPos)
         
         if let worldToHitTest = hit.transformInWorld {
-            let boxAssetType = NodeAssetType(rawValue: "box")
-            let clonedNode = boxAssetType?.initializeNode()
-            let globalNodeToWorld = SCNMatrix4Invert(globalNode.transform)
-            let globalNodeToHitTest = SCNMatrix4Mult(worldToHitTest, globalNodeToWorld)
-
-            clonedNode!.transform = globalNodeToHitTest
-                globalNode.addChildNode(clonedNode!)
-            addSCNNodeToAllSceneNodes(node: clonedNode!)
-
+            
+            if let clonedNode = currentNodeTypeBeingAdded.initializeNode() {
+                print("adding node \(currentNodeTypeBeingAdded)")
+                let globalNodeToWorld = SCNMatrix4Invert(globalNode.transform)
+                let globalNodeToHitTest = SCNMatrix4Mult(worldToHitTest, globalNodeToWorld)
+                
+                clonedNode.transform = globalNodeToHitTest
+                globalNode.addChildNode(clonedNode)
+                addSCNNodeToAllSceneNodes(node: clonedNode)
+            }
 
         }
     }
@@ -307,7 +305,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
-        print("didUpdate \(node.pivot)")
 
         // Update size of the geometry associated with Plane nodes
         if let plane = node.childNodes.first?.geometry as? SCNPlane {
@@ -328,8 +325,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     // MARK: IB Actions
     @IBAction func boxButtonTapped(_ sender: UIButton) {
-        let newBox = NodeCreator.orangeBox
-        currentNodeBeingAdded = newBox
+        currentNodeTypeBeingAdded = .blueBox
     }
     
     @IBAction func resetButtonTapped(_ sender: Any) {
@@ -343,7 +339,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             mode = .waitingForSettingNewObject
 
             displayAllInitialNodes()
-            FirebaseManager.shared.observeOnDelegate(self as! FirebaseManagerDelegate)
+            FirebaseManager.shared.observeOnDelegate(self)
         }
     }
 
@@ -417,7 +413,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
 extension ViewController: MenuCollectionViewDelegate {
     func didTapCell(assetType: NodeAssetType) {
-        print("did tap cell")
+        currentNodeTypeBeingAdded = assetType
     }
 }
 
@@ -428,11 +424,11 @@ extension ViewController: FirebaseManagerDelegate {
         if let scnNode = createNodeFromAsset(assetType: node.type.rawValue, assetExtension: "scn", transform: node.transform) {
             globalNode.addChildNode(scnNode)
         }
-
     }
     
     func didChangeNode(node: SceneNode) {
         // change node on the scene
+        
     }
 
     func didRemoveNode(id: String) {

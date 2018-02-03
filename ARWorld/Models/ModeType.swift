@@ -20,15 +20,32 @@ enum NodeAssetType: String {
     case lowPolyTree = "lowPolyTree"
     case orange = "orange"
     case dragon = "dragon"
+    case box = "box"
     
     static func assetTypesForMenu() -> [NodeAssetType] {
-        return [.wolf, .gong, .vase, .arjun, .greenBall, .lowPolyTree, .orange, .dragon]
+        return [.wolf, .gong, .vase, .arjun, .greenBall, .lowPolyTree, .orange, .dragon, .box]
     }
     
     static func getType(typeName: String) -> NodeAssetType {
         switch typeName {
         case NodeAssetType.wolf.rawValue:
             return NodeAssetType.wolf
+        case NodeAssetType.blueBox.rawValue:
+            return NodeAssetType.blueBox
+        case NodeAssetType.gong.rawValue:
+            return NodeAssetType.gong
+        case NodeAssetType.vase.rawValue:
+            return NodeAssetType.vase
+        case NodeAssetType.arjun.rawValue:
+            return NodeAssetType.arjun
+        case NodeAssetType.greenBall.rawValue:
+            return NodeAssetType.greenBall
+        case NodeAssetType.lowPolyTree.rawValue:
+            return NodeAssetType.lowPolyTree
+        case NodeAssetType.orange.rawValue:
+            return NodeAssetType.orange
+        case NodeAssetType.dragon.rawValue:
+            return NodeAssetType.dragon
         case NodeAssetType.box.rawValue:
             return NodeAssetType.box
         default:
@@ -57,6 +74,8 @@ enum NodeAssetType: String {
         case .dragon:
             return createNodeFromAsset(assetName: "dragon", assetExtension: "dae")
 
+        case .box:
+            return createNodeFromAsset(assetName: "box", assetExtension: "scn")
         }
     }
     
@@ -90,6 +109,8 @@ enum NodeAssetType: String {
             return #imageLiteral(resourceName: "menuOrange")
         case .dragon:
             return #imageLiteral(resourceName: "menuDragon")
+        case .box:
+            return #imageLiteral(resourceName: "menuBox")
         }
     }
 }
