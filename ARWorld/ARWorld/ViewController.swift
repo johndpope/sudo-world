@@ -77,9 +77,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
         globalNode.addChildNode(hitTestPlane)
         globalNode.addChildNode(axisNode)
-
-        // Set the scene to the view
-        sceneView.scene = scene
     }
 
 
