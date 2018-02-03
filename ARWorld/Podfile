@@ -8,6 +8,6 @@ target 'ARWorld' do
   # Pods for ARWorld
 
   pod 'Firebase/Core'
-
+  pod 'Firebase/Database'
 
 end
