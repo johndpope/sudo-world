@@ -29,6 +29,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     var currentNodeBeingAdded: SCNNode?
     
+    var allMenuAssets = [NodeAssetType]()
+    var allNodesDisplayed = [SCNNode]() // Populated from firebase
+    
     var mode: InteractionMode = .waitingForAnchorLocation {
         didSet {
             switch mode {
@@ -326,7 +329,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
         
         resetNodes()
-        
 
         self.sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }

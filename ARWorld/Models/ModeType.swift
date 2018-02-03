@@ -9,19 +9,41 @@
 import Foundation
 import SceneKit
 
-protocol _3DAssetType {
-    static func initializeNode() -> SCNNode?
-}
 
-extension _3DAssetType {
-    static func initializeNode() -> SCNNode? {
-        return RootScene.shared.rootNode.childNode(withName: className(), recursively: false)
+enum NodeAssetType: String {
+    case wolf = "wolf"
+    case blueBox = "blueBox"
+    
+    static func getType(typeName: String) -> NodeAssetType {
+        switch typeName {
+        case NodeAssetType.wolf.rawValue:
+            return NodeAssetType.wolf
+        default:
+            return NodeAssetType.blueBox
+        }
     }
-
-    static func className() -> String {
-        return String(describing: self)
+    
+    func initializeNode() -> SCNNode? {
+        switch self {
+        case .wolf:
+            return createNodeFromAsset(assetName: "wolf", assetExtension: "dae")
+        case .blueBox:
+            return NodeCreator.blueBox
+        }
     }
-
+    
+    func createNodeFromAsset(assetName: String, assetExtension: String) -> SCNNode? {
+        guard let url = Bundle.main.url(forResource: "art.scnassets/\(assetName)", withExtension: assetExtension) else {
+            return nil
+        }
+        guard let node = SCNReferenceNode(url: url) else { return nil }
+        node.load()
+        return node
+    }
+    
+    //    func className() -> String {
+    //        return String(describing: self)
+    //    }
 }
 
 struct RootScene {
@@ -29,6 +51,3 @@ struct RootScene {
     let rootNode = SCNScene(named: "art.scnassets/ship.scn")!.rootNode
 }
 
-struct GlobalOriginNodeModel: _3DAssetType {}
-
-struct ShipModel: _3DAssetType {}

@@ -168,19 +168,3 @@ extension SceneNode : Equatable {
         return true
     }
 }
-
-enum NodeAssetType: String {
-    case plane = "plane"
-    case box = "box"
-
-    static func getType(typeName: String) -> NodeAssetType {
-        switch typeName {
-        case NodeAssetType.plane.rawValue:
-            return NodeAssetType.plane
-        default:
-            return NodeAssetType.box
-        }
-    }
-}
-
-

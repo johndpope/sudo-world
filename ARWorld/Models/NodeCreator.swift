@@ -70,10 +70,6 @@ struct NodeCreator {
         return SCNNode(geometry: box)
     }
     
-    static var wolfNode: SCNNode? {
-        return createNodeFromAsset(assetName: "wolf", assetExtension: "dae")
-    }
-    
     static var blueBox: SCNNode {
         let box = SCNBox(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0)
         box.firstMaterial?.diffuse.contents = UIColor.blue
@@ -138,15 +134,7 @@ struct NodeCreator {
         
         return planeNode
     }
-    
-    private static func createNodeFromAsset(assetName: String, assetExtension: String) -> SCNNode? {
-        guard let url = Bundle.main.url(forResource: "art.scnassets/\(assetName)", withExtension: assetExtension) else {
-            return nil
-        }
-        guard let node = SCNReferenceNode(url: url) else { return nil }
-        node.load()
-        return node
-    }
+
 }
 
 extension SCNPlane {
