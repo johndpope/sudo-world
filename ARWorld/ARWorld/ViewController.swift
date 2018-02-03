@@ -32,9 +32,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     var currentNodeBeingAdded: SCNNode?
 
-    var allSceneNodes = [SceneNode]()
+    var allSceneNodes: [SceneNode]?
     
     var allMenuAssets = [NodeAssetType]()
+
     var allNodesDisplayed = [SCNNode]() // Populated from firebase
     
     var mode: InteractionMode = .waitingForAnchorLocation {
@@ -60,7 +61,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         configuration.planeDetection = .horizontal
         return configuration
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configSceneView(sceneView: sceneView)
@@ -70,7 +71,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         sceneView.addGestureRecognizer(tapGesture)
-
+        FirebaseManager.shared.getCurrentDatabase { (sceneNodes) in
+            self.allSceneNodes = sceneNodes
+        }
         resetNodes()
         
         menuCollectionView.menuCollectionDelegate = self
@@ -129,19 +132,30 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             break
         }
     }
-    
+
+    // setting the objects
     func setObject(_ gestureRecognizer: UITapGestureRecognizer) {
         let touchPos = gestureRecognizer.location(in: sceneView)
         let hit = realWorldHit(at: touchPos)
         
         if let worldToHitTest = hit.transformInWorld {
-            let clonedNode = NodeCreator.blueBox
-                globalNode.addChildNode(clonedNode)
+            let boxAssetType = NodeAssetType(rawValue: "box")
+            let clonedNode = boxAssetType?.initializeNode()
+            let globalNodeToWorld = SCNMatrix4Invert(globalNode.transform)
+            let globalNodeToHitTest = SCNMatrix4Mult(worldToHitTest, globalNodeToWorld)
 
-                let globalNodeToWorld = SCNMatrix4Invert(globalNode.transform)
-                let globalNodeToHitTest = SCNMatrix4Mult(worldToHitTest, globalNodeToWorld)
-                
-                clonedNode.transform = globalNodeToHitTest
+            clonedNode!.transform = globalNodeToHitTest
+                globalNode.addChildNode(clonedNode!)
+            addSCNNodeToAllSceneNodes(node: clonedNode!)
+
+
+        }
+    }
+
+    func addSCNNodeToAllSceneNodes(node: SCNNode) {
+        if let name = node.name {
+            let sceneNode = FirebaseManager.shared.insertNode(type: NodeAssetType(rawValue: name)!, transform: node.transform)
+            allSceneNodes?.append(sceneNode)
         }
     }
     
@@ -321,11 +335,27 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBAction func resetButtonTapped(_ sender: Any) {
         self.restartSession()
     }
-    
+
+    // calibration finishes
     @IBAction func calibrationCompleteButton(_ sender: Any) {
         if mode == .draggingAnchorDirection {
             print("waitingForSettingNewObject MODE")
             mode = .waitingForSettingNewObject
+
+            displayAllInitialNodes()
+            FirebaseManager.shared.observeOnDelegate(self as! FirebaseManagerDelegate)
+        }
+    }
+
+    func displayAllInitialNodes() {
+        if let allSceneNodes = self.allSceneNodes {
+            for sceneNode in allSceneNodes {
+                let nodeAssetType = NodeAssetType(rawValue: "box")!
+                if let node = nodeAssetType.initializeNode() {
+                    node.transform = sceneNode.transform
+                    globalNode.addChildNode(node)
+                }
+            }
         }
     }
     
@@ -339,6 +369,50 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
         self.sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }
+
+//    // place a model at the hit test result location
+//    private func placeModel(modelType: String, assetExtension: String, hitTestInWorld: SCNMatrix4) {
+//        // Get transform of result
+//        // Define hitTestInWorld as it means hitTestInWorldCoordinate, etc
+//
+//        //        let hitTestInWorld = position
+//
+//        let globalNodeInWorld = g!.worldTransform
+//
+//        let globalNodeInWorld_Inv = SCNMatrix4Invert(globalNodeInWorld)
+//
+//        let hitTestInGlobalNode = matrix_float4x4(SCNMatrix4Mult(hitTestInWorld, globalNodeInWorld_Inv))
+//
+//        let
+//
+//        // Get position from transform (4th column of transformation matrix)
+//        //        let hitTestInGlobalNode_Position = SCNVector3Make(hitTestInGlobalNode.columns.3.x, hitTestInGlobalNode.columns.3.y, hitTestInGlobalNode.columns.3.z)
+//
+//        let hitTestInGlobalNode_Position = SCNVector3Make(hitTestInGlobalNode.columns.3.x, hitTestInGlobalNode.columns.3.y, hitTestInGlobalNode.columns.3.z)
+//
+//
+//        // Add box
+//        let modelNode = createNodeFromAsset(assetType: modelType, assetExtension: assetExtension, position: hitTestInGlobalNode_Position)!
+//
+//        globalNode?.addChildNode(modelNode)
+//    }
+
+    private func createNodeFromAsset(assetType: String, assetExtension: String, transform: SCNMatrix4) -> SCNNode? {
+
+        guard let url = Bundle.main.url(forResource: "art.scnassets/\(assetType)", withExtension: assetExtension) else {
+            NSLog("Could not find door scene")
+            return nil
+        }
+        guard let node = SCNReferenceNode(url: url) else { return nil }
+
+        node.load()
+
+        // Position scene
+        node.name = assetType
+        node.transform = transform
+
+        return node
+    }
 }
 
 extension ViewController: MenuCollectionViewDelegate {
@@ -350,6 +424,11 @@ extension ViewController: MenuCollectionViewDelegate {
 extension ViewController: FirebaseManagerDelegate {
     func didAddNode(node: SceneNode) {
         // add node on the scene
+        self.allSceneNodes?.append(node)
+        if let scnNode = createNodeFromAsset(assetType: node.type.rawValue, assetExtension: "scn", transform: node.transform) {
+            globalNode.addChildNode(scnNode)
+        }
+
     }
     
     func didChangeNode(node: SceneNode) {

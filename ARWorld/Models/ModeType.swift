@@ -29,6 +29,8 @@ enum NodeAssetType: String {
         switch typeName {
         case NodeAssetType.wolf.rawValue:
             return NodeAssetType.wolf
+        case NodeAssetType.box.rawValue:
+            return NodeAssetType.box
         default:
             return NodeAssetType.blueBox
         }
@@ -63,6 +65,7 @@ enum NodeAssetType: String {
             return nil
         }
         guard let node = SCNReferenceNode(url: url) else { return nil }
+        node.name = assetName
         node.load()
         return node
     }

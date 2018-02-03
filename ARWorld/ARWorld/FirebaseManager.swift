@@ -35,6 +35,13 @@ struct FirebaseManager {
 
     func insertNode(type: NodeAssetType, transform: SCNMatrix4)-> SceneNode {
         let key = db.child(FirebaseManager.modelsTableName).childByAutoId().key
+//        let post = [
+//            "id": key,
+//            FirebaseManager.modelsTable_typeColumn: type.rawValue,
+//            FirebaseManager.modelsTable_transformColumn: transform
+//            ]
+//        db.child(FirebaseManager.modelsTableName).childByAutoId().setValue(post)
+
 
         db.child(FirebaseManager.modelsTableName)
             .child(key)
@@ -68,12 +75,12 @@ struct FirebaseManager {
     func observeOnDelegate(_ delegate: FirebaseManagerDelegate?){
         //TODO: block might be out of scope
         db.child(FirebaseManager.modelsTableName).observe(.childAdded, with: { (snapshot) -> Void in
-            if let nodeData = snapshot.value as? [String : AnyObject] {
+            if let nodeData = snapshot.value as? [String : AnyObject], let type = nodeData[FirebaseManager.modelsTable_typeColumn] as? String, let transform = nodeData[FirebaseManager.modelsTable_transformColumn] as? [Float] {
                 delegate?.didAddNode(
                     node: SceneNode(
                         id: snapshot.key,
-                        type: NodeAssetType.getType(typeName: nodeData[FirebaseManager.modelsTable_typeColumn] as! String),
-                        transformAsArray: nodeData[FirebaseManager.modelsTable_transformColumn] as! [Float]))
+                        type: NodeAssetType.getType(typeName: type),
+                        transformAsArray: transform))
             }
         })
 
@@ -121,16 +128,13 @@ struct FirebaseManager {
     static func getSceneNodes(databaseSnapshot: [String : [String : AnyObject]]) -> Array<SceneNode> {
         var listOfSceneNodes: Array<SceneNode> = Array()
 
-        if let models = databaseSnapshot[FirebaseManager.modelsTableName] {
-            for (modelID, modelData) in models {
-                let modelDataAsDictionary = modelData as? [String : AnyObject]
-                let nodeType = modelDataAsDictionary![FirebaseManager.modelsTable_typeColumn] as? String
-                //TODO: remove unessary casting from NSarray and array
-                let nodeTransform = modelDataAsDictionary![FirebaseManager.modelsTable_transformColumn] as? NSArray
-                listOfSceneNodes.append(SceneNode(id: modelID, type: NodeAssetType.getType(typeName: nodeType!), transformAsArray: nodeTransform as! Array<Float>))
+        let models = databaseSnapshot
+        for (modelID, modelData) in models {
+            let modelDataAsDictionary = modelData
+            if let nodeType = modelDataAsDictionary[FirebaseManager.modelsTable_typeColumn] as? String, let nodeTransform = modelDataAsDictionary[FirebaseManager.modelsTable_transformColumn] as? NSArray, let transformArray = nodeTransform as? Array<Float> {
+                listOfSceneNodes.append(SceneNode(id: modelID, type: NodeAssetType.getType(typeName: nodeType), transformAsArray: transformArray))
             }
         }
-
         return listOfSceneNodes
     }
 }
