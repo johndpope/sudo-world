@@ -74,13 +74,6 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hLA-YN-agn">
-                                <rect key="frame" x="27" y="576" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
-                                <connections>
-                                    <action selector="boxButtonTapped:" destination="BV1-FR-VrT" eventType="touchUpInside" id="xpa-9x-Cd2"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ZD-Wn-6cP">
                                 <rect key="frame" x="325" y="54" width="40" height="40"/>
                                 <constraints>
@@ -112,8 +105,6 @@
                             <constraint firstItem="lFG-ki-0fC" firstAttribute="leading" secondItem="nui-qi-li0" secondAttribute="leading" id="Tu6-cR-NBu"/>
                             <constraint firstItem="T4x-E7-a9t" firstAttribute="top" secondItem="TFl-2S-3sQ" secondAttribute="bottom" id="UBS-gi-hmk"/>
                             <constraint firstItem="TFl-2S-3sQ" firstAttribute="leading" secondItem="nui-qi-li0" secondAttribute="leading" id="WgQ-RQ-JOV"/>
-                            <constraint firstItem="hLA-YN-agn" firstAttribute="leading" secondItem="nui-qi-li0" secondAttribute="leading" constant="27" id="YsK-Hj-K04"/>
-                            <constraint firstItem="T4x-E7-a9t" firstAttribute="top" secondItem="hLA-YN-agn" secondAttribute="bottom" constant="172" id="fAg-dR-PmZ"/>
                             <constraint firstItem="Z4R-hP-bBB" firstAttribute="centerY" secondItem="3ZD-Wn-6cP" secondAttribute="centerY" id="gkg-XV-mqy"/>
                             <constraint firstAttribute="trailing" secondItem="3ZD-Wn-6cP" secondAttribute="trailing" constant="10" id="lna-AF-3JJ"/>
                             <constraint firstAttribute="trailing" secondItem="lFG-ki-0fC" secondAttribute="trailing" id="op9-rD-mM9"/>

@@ -20,15 +20,34 @@ enum NodeAssetType: String {
     case lowPolyTree = "lowPolyTree"
     case orange = "orange"
     case dragon = "dragon"
+    case box = "box"
     
     static func assetTypesForMenu() -> [NodeAssetType] {
-        return [.wolf, .gong, .vase, .arjun, .greenBall, .lowPolyTree, .orange, .dragon]
+        return [.wolf, .greenBall, .lowPolyTree, .box, .gong, .vase, .arjun, .orange, .dragon]
     }
     
     static func getType(typeName: String) -> NodeAssetType {
         switch typeName {
         case NodeAssetType.wolf.rawValue:
             return NodeAssetType.wolf
+        case NodeAssetType.blueBox.rawValue:
+            return NodeAssetType.blueBox
+        case NodeAssetType.gong.rawValue:
+            return NodeAssetType.gong
+        case NodeAssetType.vase.rawValue:
+            return NodeAssetType.vase
+        case NodeAssetType.arjun.rawValue:
+            return NodeAssetType.arjun
+        case NodeAssetType.greenBall.rawValue:
+            return NodeAssetType.greenBall
+        case NodeAssetType.lowPolyTree.rawValue:
+            return NodeAssetType.lowPolyTree
+        case NodeAssetType.orange.rawValue:
+            return NodeAssetType.orange
+        case NodeAssetType.dragon.rawValue:
+            return NodeAssetType.dragon
+        case NodeAssetType.box.rawValue:
+            return NodeAssetType.box
         default:
             return NodeAssetType.blueBox
         }
@@ -37,7 +56,7 @@ enum NodeAssetType: String {
     func initializeNode() -> SCNNode? {
         switch self {
         case .wolf:
-            return createNodeFromAsset(assetName: "wolf", assetExtension: "dae")
+            return createNodeFromAsset(assetName: "wolf/wolf", assetExtension: "dae")
         case .gong:
             return createNodeFromAsset(assetName: "gong", assetExtension: "dae")
         case .vase:
@@ -45,16 +64,17 @@ enum NodeAssetType: String {
         case .blueBox:
             return NodeCreator.blueBox
         case .arjun:
-            return createNodeFromAsset(assetName: "arjun", assetExtension: "dae")
+            return createNodeFromAsset(assetName: "arjun/arjun", assetExtension: "dae")
         case .greenBall:
             return createNodeFromAsset(assetName: "greenBall", assetExtension: "dae")
         case .lowPolyTree:
             return createNodeFromAsset(assetName: "lowPolyTree", assetExtension: "dae")
         case .orange:
-            return createNodeFromAsset(assetName: "orange", assetExtension: "dae")
+            return createNodeFromAsset(assetName: "orange/orange", assetExtension: "dae")
         case .dragon:
-            return createNodeFromAsset(assetName: "dragon", assetExtension: "dae")
-
+            return createNodeFromAsset(assetName: "dragon/dragon", assetExtension: "dae")
+        case .box:
+            return createNodeFromAsset(assetName: "box", assetExtension: "scn")
         }
     }
     
@@ -63,6 +83,7 @@ enum NodeAssetType: String {
             return nil
         }
         guard let node = SCNReferenceNode(url: url) else { return nil }
+        node.name = assetName
         node.load()
         return node
     }
@@ -87,6 +108,8 @@ enum NodeAssetType: String {
             return #imageLiteral(resourceName: "menuOrange")
         case .dragon:
             return #imageLiteral(resourceName: "menuDragon")
+        case .box:
+            return #imageLiteral(resourceName: "menuBox")
         }
     }
 }
