@@ -23,7 +23,7 @@ enum NodeAssetType: String {
     case box = "box"
     
     static func assetTypesForMenu() -> [NodeAssetType] {
-        return [.wolf, .gong, .vase, .arjun, .greenBall, .lowPolyTree, .orange, blueBox, .dragon, .box]
+        return [.wolf, .greenBall, .lowPolyTree, .box, .gong, .vase, .arjun, .orange, .dragon]
     }
     
     static func getType(typeName: String) -> NodeAssetType {

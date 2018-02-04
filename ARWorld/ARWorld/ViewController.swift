@@ -91,8 +91,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     func configSceneView(sceneView: ARSCNView) {
         sceneView.delegate = self
-        sceneView.showsStatistics = true
-        sceneView.debugOptions  = [.showConstraints, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
+//        sceneView.showsStatistics = true
+        sceneView.debugOptions  = [.showConstraints, ARSCNDebugOptions.showFeaturePoints]
+        // ARSCNDebugOptions.showWorldOrigin
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -107,6 +108,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     // MARK: - Touch handling
     
+    var isCollectionViewActionEnabled = true
+    
     @objc dynamic func handleTap(_ gestureRecognizer: UITapGestureRecognizer) {
         switch mode {
         case .waitingForAnchorLocation:
@@ -114,7 +117,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         case .draggingAnchorDirection:
             break
         case .waitingForSettingNewObject:
+            isCollectionViewActionEnabled = false
             setObject(gestureRecognizer)
+            isCollectionViewActionEnabled = true
             break
         }
     }
@@ -324,10 +329,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     // MARK: IB Actions
-    @IBAction func boxButtonTapped(_ sender: UIButton) {
-        currentNodeTypeBeingAdded = .blueBox
-    }
-    
     @IBAction func resetButtonTapped(_ sender: Any) {
         self.restartSession()
     }
@@ -346,7 +347,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func displayAllInitialNodes() {
         if let allSceneNodes = self.allSceneNodes {
             for sceneNode in allSceneNodes {
-                let nodeAssetType = NodeAssetType(rawValue: "box")!
+                let nodeAssetType = NodeAssetType(rawValue: sceneNode.type.rawValue)!
                 if let node = nodeAssetType.initializeNode() {
                     node.transform = sceneNode.transform
                     globalNode.addChildNode(node)
@@ -393,22 +394,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 //        globalNode?.addChildNode(modelNode)
 //    }
 
-    private func createNodeFromAsset(assetType: String, assetExtension: String, transform: SCNMatrix4) -> SCNNode? {
-
-        guard let url = Bundle.main.url(forResource: "art.scnassets/\(assetType)", withExtension: assetExtension) else {
-            NSLog("Could not find door scene")
-            return nil
-        }
-        guard let node = SCNReferenceNode(url: url) else { return nil }
-
-        node.load()
-
-        // Position scene
-        node.name = currentNodeTypeBeingAdded.rawValue
-        node.transform = transform
-
-        return node
-    }
+//    private func createNodeFromAsset(assetType: String, assetExtension: String, transform: SCNMatrix4) -> SCNNode? {
+//
+//        guard let url = Bundle.main.url(forResource: "art.scnassets/\(assetType)", withExtension: assetExtension) else {
+//            NSLog("Could not find door scene")
+//            return nil
+//        }
+//        guard let node = SCNReferenceNode(url: url) else { return nil }
+//
+//        node.load()
+//
+//        // Position scene
+//        node.name = currentNodeTypeBeingAdded.rawValue
+//        node.transform = transform
+//
+//        return node
+//    }
 }
 
 extension ViewController: MenuCollectionViewDelegate {
@@ -421,8 +422,9 @@ extension ViewController: FirebaseManagerDelegate {
     func didAddNode(node: SceneNode) {
         // add node on the scene
         self.allSceneNodes?.append(node)
-        if let scnNode = createNodeFromAsset(assetType: node.type.rawValue, assetExtension: "scn", transform: node.transform) {
-            globalNode.addChildNode(scnNode)
+        if let nodeAssetType = NodeAssetType(rawValue: node.type.rawValue),
+            let newNode = nodeAssetType.initializeNode(){
+            globalNode.addChildNode(newNode)
         }
     }
     
