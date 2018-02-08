@@ -30,13 +30,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var panGesture: UIPanGestureRecognizer!
     var tapGesture: UITapGestureRecognizer!
 
-    var editingNode: SCNNode?
+    var editingNode: SudoNode?
     
-    var allSceneNodes: [FirebaseNode]?
+//    var allSceneNodes: [FirebaseNode]?
     var allMenuAssets = [NodeAssetType]()
 
-    var allNodesDisplayed = [SCNNode]() // Populated from firebase
+//    var allNodesDisplayed = [SCNNode]() // Populated from firebase
     var previousRotation: CGFloat? = nil
+    var nodes = [SudoNode]()
     
     
     var mode: InteractionMode = .waitingForAnchorLocation {
@@ -58,6 +59,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 hitTestPlane.boundingBox.max = SCNVector3(x: 1000, y: 0, z: 1000)
                 
             case .normal:
+                self.hitTestPlane.isHidden = true
                 let newView = NormalModeView.initFromNib() as! NormalModeView
                 newView.delegate = self
                 setContainerViewToView(newView)
@@ -89,11 +91,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         super.viewDidLoad()
         configSceneView(sceneView: sceneView)
         
-        FirebaseManager.shared.getCurrentDatabase { (sceneNodes) in
-            self.allSceneNodes = sceneNodes
+        FirebaseManager.shared.getCurrentDatabase { (fbNodes) in
+            if let fbNodes = fbNodes {
+                self.nodes = fbNodes.map({SudoNode(fbNode: $0)})
+            }
         }
         resetNodes()
-        
     }
     
     func resetNodes() {
@@ -127,7 +130,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
 
     // setting the objects
-    func setObject(asset: NodeAssetType) -> SCNNode? {
+    func setObject(asset: NodeAssetType) -> SudoNode? {
         let hit = realWorldHit(at: CGPoint(x: view.bounds.midX, y: 2 * (view.bounds.height / 3)))
         
         if let worldToHitTest = hit.transformInWorld {
@@ -137,20 +140,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 let globalNodeToHitTest = SCNMatrix4Mult(worldToHitTest, globalNodeToWorld)
                 
                 clonedNode.transform = globalNodeToHitTest
-                globalNode.addChildNode(clonedNode)
-                addSCNNodeToAllSceneNodes(node: clonedNode, assetType: asset)
-                return clonedNode
+                let sudoNode = SudoNode(sceneNode: clonedNode, type: asset)
+                addNodeToNodes(node: sudoNode)
+                return sudoNode
             }
-
         }
         return nil
-    }
-
-    func addSCNNodeToAllSceneNodes(node: SCNNode, assetType: NodeAssetType) {
-        if let _ = node.name {
-            let sceneNode = FirebaseManager.shared.insertNode(type: assetType, transform: node.transform)
-            allSceneNodes?.append(sceneNode)
-        }
     }
     
     var axisNode = NodeCreator.createAxesNode(quiverLength: 0.7, quiverThickness: 1)
@@ -283,16 +278,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     // calibration finishes
     func addAllNodesToGlobalNode() {
-        if let allSceneNodes = self.allSceneNodes {
-            for sceneNode in allSceneNodes {
-                let nodeAssetType = NodeAssetType(rawValue: sceneNode.type.rawValue)!
-                if let node = nodeAssetType.initializeNode() {
-                    node.transform = sceneNode.transform
-                    allNodesDisplayed.append(node)
-                    globalNode.addChildNode(node)
-                }
-            }
+        for node in nodes {
+            globalNode.addChildNode(node.sceneNode)
         }
+    }
+    
+    func addNodeToNodes(node: SudoNode) {
+        nodes.append(node)
+        globalNode.addChildNode(node.sceneNode)
     }
     
     private func restartSession() {
@@ -310,21 +303,25 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 extension ViewController: FirebaseManagerDelegate {
     func didAddNode(node: FirebaseNode) {
         // add node on the scene
-        self.allSceneNodes?.append(node)
-        if let nodeAssetType = NodeAssetType(rawValue: node.type.rawValue),
-            let newNode = nodeAssetType.initializeNode() {
-            newNode.transform = node.transform
-//            globalNode.addChildNode(newNode)
+        let sudoNode = SudoNode(fbNode: node)
+        if !nodes.contains(sudoNode) {
+            addNodeToNodes(node: sudoNode)
         }
     }
     
     func didChangeNode(node: FirebaseNode) {
-        // change node on the scene
-        
+        didRemoveNode(id: node.id)
+        let newSudoNode = SudoNode(fbNode: node)
+        addNodeToNodes(node: newSudoNode)
     }
 
     func didRemoveNode(id: String) {
-        // remove node on the scene
+        let ids = nodes.map({$0.id})
+        if let index = ids.index(of: id) {
+            let oldNode = nodes[index]
+            oldNode.sceneNode.removeFromParentNode()
+            nodes.remove(at: index)
+        }
     }
 }
 
@@ -338,6 +335,10 @@ extension ViewController: WaitingForAnchorLocationViewDelegate {
 
 extension ViewController: CalibrationViewDelegate {
     
+    func calibrationPanGestureBegan(screenCoordinates: CGPoint) {
+        handleInitialCalibrationDrag(location: screenCoordinates)
+    }
+    
     func calibrationPanGestureChanged(screenCoordinates: CGPoint) {
         handleInitialCalibrationDrag(location: screenCoordinates)
     }
@@ -346,6 +347,7 @@ extension ViewController: CalibrationViewDelegate {
         mode = .normal
         addAllNodesToGlobalNode()
         FirebaseManager.shared.observeOnDelegate(self)
+        globalNode.geometry = nil
     }
     
     
@@ -356,7 +358,7 @@ extension ViewController: NormalModeViewDelegate {
         let hit = sceneView.hitTest(screenLocation, options: nil)
         
         for hitTestResult in hit {
-            if let parentNode = findNode(targetNode: hitTestResult.node, in: allNodesDisplayed) {
+            if let parentNode = findNode(targetNode: hitTestResult.node, in: nodes) {
                 self.editingNode = parentNode
                 print("Hit Test Result: \(editingNode.debugDescription)")
                 mode = .editing
@@ -377,6 +379,15 @@ extension ViewController: NormalModeViewDelegate {
     }
     
     /// Find the same instance of target node or its parent
+    func findNode(targetNode: SCNNode, in nodes: [SudoNode]) -> SudoNode? {
+        for node in nodes {
+            if let _ = findNode(targetNode: targetNode, in: [node.sceneNode]) {
+                return node
+            }
+        }
+        return nil
+    }
+    
     func findNode(targetNode: SCNNode, in nodes: [SCNNode]) -> SCNNode? {
         return nodes.filter {
             return $0 === targetNode || findNode(targetNode: targetNode, in: $0.childNodes) != nil
@@ -420,12 +431,16 @@ extension ViewController: EditingModeViewDelegate {
     }
     
     func doneButtonPressed() {
+        editingNode?.pushChanges()
         editingNode = nil
         mode = .normal
     }
     
     func trashButtonPressed() {
-        editingNode?.removeFromParentNode()
+        if let node = editingNode {
+            node.sceneNode.removeFromParentNode()
+            FirebaseManager.shared.deleteNode(node: node.fireBaseNode)
+        }
         editingNode = nil
         mode = .normal
     }

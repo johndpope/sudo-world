@@ -56,6 +56,26 @@ class SudoNode: Equatable {
         }
     }
     
+    var worldPosition: SCNVector3 {
+        get {
+            return sceneNode.worldPosition
+        }
+        set {
+            sceneNode.worldPosition = newValue
+            fireBaseNode.transform = sceneNode.transform
+        }
+    }
+    
+    var eulerAngles: SCNVector3 {
+        get {
+            return sceneNode.eulerAngles
+        }
+        set {
+            sceneNode.eulerAngles = newValue
+            fireBaseNode.transform = sceneNode.transform
+        }
+    }
+    
     
     var id: String {
         return fireBaseNode.id
