@@ -39,6 +39,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var allMenuAssets = [NodeAssetType]()
 
     var allNodesDisplayed = [SCNNode]() // Populated from firebase
+    var previousRotation: CGFloat? = nil
+    
     
     var mode: InteractionMode = .waitingForAnchorLocation {
         didSet {
@@ -382,8 +384,9 @@ extension ViewController: NormalModeViewDelegate {
 extension ViewController: EditingModeViewDelegate {
     
     func editPanDidChange(screenCoordinates: CGPoint) {
-        if let hitTestlocationInWorld = scenekitHit(at: screenCoordinates, within: hitTestPlane) {
-            editingNode?.position = hitTestlocationInWorld
+        if let hitTestTransformInWorld = realWorldHit(at: screenCoordinates).transformInWorld {
+            let hitTestPositionInWorld = SCNVector3(hitTestTransformInWorld.m41, hitTestTransformInWorld.m42, hitTestTransformInWorld.m43)
+            editingNode?.worldPosition = hitTestPositionInWorld
         }
     }
     
@@ -391,10 +394,26 @@ extension ViewController: EditingModeViewDelegate {
         editingNode?.scale = SCNVector3(scale, scale, scale)
     }
     
+    func rotationDidBegin(rotation: CGFloat) {
+        previousRotation = rotation
+    }
+    
     func rotationDidChange(rotation: CGFloat) {
-        if let node = editingNode {
-            node.transform = SCNMatrix4Mult(node.transform, SCNMatrix4MakeRotation(Float(rotation), 0, 1, 0))
+        guard let previousRotation = previousRotation else {
+            return
         }
+        
+        let rotationDelta = rotation - previousRotation
+        print("rotation with angle \(rotationDelta)")
+        
+        if let node = editingNode {
+            node.eulerAngles.setAxis(.y, to: node.eulerAngles.y + Float(rotationDelta) * Constants.Transformation.rotationFactor)
+        }
+        self.previousRotation = rotation
+    }
+    
+    func rotationDidEnd(rotation: CGFloat) {
+        previousRotation = nil
     }
     
     func doneButtonPressed() {

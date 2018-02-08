@@ -72,7 +72,7 @@ class EditingModeView: UIView {
         switch sender.state {
         case .began:
             tapGestureRecognizer.isEnabled = false
-            pinchGestureRecognizer.isEnabled = false
+//            pinchGestureRecognizer.isEnabled = false
             panGestureRecognizer.isEnabled = false
             delegate?.rotationDidBegin(rotation: sender.rotation)
             break
@@ -82,7 +82,7 @@ class EditingModeView: UIView {
         case .ended, .cancelled:
             delegate?.rotationDidEnd(rotation: sender.rotation)
             tapGestureRecognizer.isEnabled = true
-            pinchGestureRecognizer.isEnabled = true
+//            pinchGestureRecognizer.isEnabled = true
             panGestureRecognizer.isEnabled = true
             break
         default:
@@ -93,7 +93,7 @@ class EditingModeView: UIView {
         switch sender.state {
         case .began:
             tapGestureRecognizer.isEnabled = false
-            rotationGestureRecognizer.isEnabled = false
+//            rotationGestureRecognizer.isEnabled = false
             panGestureRecognizer.isEnabled = false
             delegate?.pinchDidBegin(scale: sender.scale)
             break
@@ -103,7 +103,7 @@ class EditingModeView: UIView {
         case .ended, .cancelled:
             delegate?.pinchDidEnd(scale: sender.scale)
             tapGestureRecognizer.isEnabled = true
-            rotationGestureRecognizer.isEnabled = true
+//            rotationGestureRecognizer.isEnabled = true
             panGestureRecognizer.isEnabled = true
             break
         default:
