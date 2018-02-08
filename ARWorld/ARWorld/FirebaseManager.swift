@@ -11,8 +11,8 @@ import FirebaseDatabase
 import SceneKit
 
 protocol FirebaseManagerDelegate: class {
-    func didAddNode(node: SceneNode)
-    func didChangeNode(node: SceneNode)
+    func didAddNode(node: FirebaseNode)
+    func didChangeNode(node: FirebaseNode)
     func didRemoveNode(id: String)
 }
 
@@ -33,7 +33,7 @@ struct FirebaseManager {
         deleteNode(node: node)
     }
 
-    func insertNode(type: NodeAssetType, transform: SCNMatrix4)-> SceneNode {
+    func insertNode(type: NodeAssetType, transform: SCNMatrix4)-> FirebaseNode {
         let key = db.child(FirebaseManager.modelsTableName).childByAutoId().key
         let post = [
             FirebaseManager.modelsTable_typeColumn: type.rawValue,
@@ -52,10 +52,10 @@ struct FirebaseManager {
 //            .child(FirebaseManager.modelsTable_transformColumn)
 //            .setValue(FirebaseManager.transformToArray(transform: transform))
 
-        return SceneNode(id: key, type: type, transform: transform)
+        return FirebaseNode(id: key, type: type, transform: transform)
     }
 
-    func updateNode(node: SceneNode){
+    func updateNode(node: FirebaseNode){
         db.child(FirebaseManager.modelsTableName)
             .child(node.id)
             .child(FirebaseManager.modelsTable_typeColumn)
@@ -67,7 +67,7 @@ struct FirebaseManager {
             .setValue(FirebaseManager.transformToArray(transform: node.transform))
     }
 
-    func deleteNode(node: SceneNode){
+    func deleteNode(node: FirebaseNode){
         db.child(FirebaseManager.modelsTableName).child(node.id).removeValue()
     }
 
@@ -76,7 +76,7 @@ struct FirebaseManager {
         db.child(FirebaseManager.modelsTableName).observe(.childAdded, with: { (snapshot) -> Void in
             if let nodeData = snapshot.value as? [String : AnyObject], let type = nodeData[FirebaseManager.modelsTable_typeColumn] as? String, let transform = nodeData[FirebaseManager.modelsTable_transformColumn] as? [Float] {
                 delegate?.didAddNode(
-                    node: SceneNode(
+                    node: FirebaseNode(
                         id: snapshot.key,
                         type: NodeAssetType.getType(typeName: type),
                         transformAsArray: transform))
@@ -86,7 +86,7 @@ struct FirebaseManager {
         db.child(FirebaseManager.modelsTableName).observe(.childChanged, with: { (snapshot) -> Void in
             if let nodeData = snapshot.value as? [String : AnyObject] {
                 delegate?.didChangeNode(
-                    node: SceneNode(
+                    node: FirebaseNode(
                         id: snapshot.key,
                         type: NodeAssetType.getType(typeName: nodeData[FirebaseManager.modelsTable_typeColumn] as! String),
                         transformAsArray: nodeData[FirebaseManager.modelsTable_transformColumn] as! [Float]))
@@ -98,7 +98,7 @@ struct FirebaseManager {
         })
     }
 
-    func getCurrentDatabase(didGetNodes: @escaping ([SceneNode]?) -> Void) {
+    func getCurrentDatabase(didGetNodes: @escaping ([FirebaseNode]?) -> Void) {
         db.child(FirebaseManager.modelsTableName).observeSingleEvent(of: .value, with: {(snapshot) in
             if let databaseSnapshot = snapshot.value as? [String : [String : AnyObject]] {
                 didGetNodes(FirebaseManager.getSceneNodes(databaseSnapshot: databaseSnapshot) )
@@ -124,14 +124,14 @@ struct FirebaseManager {
                           m41: transformAsArray[12], m42: transformAsArray[13], m43: transformAsArray[14], m44: transformAsArray[15])
     }
 
-    static func getSceneNodes(databaseSnapshot: [String : [String : AnyObject]]) -> Array<SceneNode> {
-        var listOfSceneNodes: Array<SceneNode> = Array()
+    static func getSceneNodes(databaseSnapshot: [String : [String : AnyObject]]) -> Array<FirebaseNode> {
+        var listOfSceneNodes: Array<FirebaseNode> = Array()
 
         let models = databaseSnapshot
         for (modelID, modelData) in models {
             let modelDataAsDictionary = modelData
             if let nodeType = modelDataAsDictionary[FirebaseManager.modelsTable_typeColumn] as? String, let nodeTransform = modelDataAsDictionary[FirebaseManager.modelsTable_transformColumn] as? NSArray, let transformArray = nodeTransform as? Array<Float> {
-                listOfSceneNodes.append(SceneNode(id: modelID, type: NodeAssetType.getType(typeName: nodeType), transformAsArray: transformArray))
+                listOfSceneNodes.append(FirebaseNode(id: modelID, type: NodeAssetType.getType(typeName: nodeType), transformAsArray: transformArray))
             }
         }
         return listOfSceneNodes
@@ -139,7 +139,7 @@ struct FirebaseManager {
 }
 
 
-struct SceneNode {
+struct FirebaseNode {
     var id: String
     var type: NodeAssetType
     var transform: SCNMatrix4
@@ -157,8 +157,8 @@ struct SceneNode {
     }
 }
 
-extension SceneNode : Equatable {
-    static func ==(lhs: SceneNode, rhs: SceneNode) -> Bool {
+extension FirebaseNode : Equatable {
+    static func ==(lhs: FirebaseNode, rhs: FirebaseNode) -> Bool {
         if(lhs.id != rhs.id){
             return false
         }

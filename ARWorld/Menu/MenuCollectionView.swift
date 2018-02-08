@@ -19,11 +19,17 @@ class MenuCollectionView: UICollectionView {
 
     weak var menuCollectionDelegate: MenuCollectionViewDelegate?
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+        super.init(frame: frame, collectionViewLayout: layout)
         
         self.delegate = self
         self.dataSource = self
+        
+        register(UINib(nibName: String(describing: MenuCollectionViewCell.self), bundle: nil), forCellWithReuseIdentifier: String(describing: MenuCollectionViewCell.self))
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -34,7 +40,7 @@ extension MenuCollectionView: UICollectionViewDelegate, UICollectionViewDataSour
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AssetMenuItemCell", for: indexPath) as? AssetMenuItemCell {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: MenuCollectionViewCell.self), for: indexPath) as? MenuCollectionViewCell {
             let currentMenuItem = allMenuAssets[indexPath.row]
             cell.config(image: currentMenuItem.menuImage())
             return cell
@@ -48,24 +54,6 @@ extension MenuCollectionView: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 100, height: 100)
-    }
-}
-
-class AssetMenuItemCell: UICollectionViewCell {
-    
-    @IBOutlet weak var imageView: UIImageView!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        self.addCornerRadius()
-        self.addTopHighlight()
-        self.addGrayDiagonalShading()
-        self.addBottomShadow()
-    }
-    
-    func config(image: UIImage) {
-        self.imageView.image = image
     }
 }
 
