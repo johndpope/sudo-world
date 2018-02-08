@@ -30,13 +30,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var panGesture: UIPanGestureRecognizer!
     var tapGesture: UITapGestureRecognizer!
 
-    var editingNode: SudoNode?
+    var editingNode: SudoNode? {
+        willSet {
+            newValue?.sceneNode.pivot
+        }
+    }
+    var initialEditingScale: CGFloat = 1
+    var previousRotation: CGFloat? = nil
     
 //    var allSceneNodes: [FirebaseNode]?
     var allMenuAssets = [NodeAssetType]()
 
 //    var allNodesDisplayed = [SCNNode]() // Populated from firebase
-    var previousRotation: CGFloat? = nil
     var nodes = [SudoNode]()
     
     
@@ -115,7 +120,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func configSceneView(sceneView: ARSCNView) {
         sceneView.delegate = self
 //        sceneView.showsStatistics = true
-        sceneView.debugOptions  = [.showConstraints, ARSCNDebugOptions.showFeaturePoints]
+//        sceneView.debugOptions  = [.showConstraints, ARSCNDebugOptions.showFeaturePoints]
         // ARSCNDebugOptions.showWorldOrigin
     }
 
@@ -404,8 +409,23 @@ extension ViewController: EditingModeViewDelegate {
         }
     }
     
+    func pinchDidBegin(scale: CGFloat) {
+        initialEditingScale = CGFloat(editingNode?.scale.x ?? 1)
+        let newScale = initialEditingScale * scale
+        editingNode?.scale = SCNVector3(newScale, newScale, newScale)
+         print("scaling with factor \(scale)")
+    }
+    
     func pinchDidChange(scale: CGFloat) {
-        editingNode?.scale = SCNVector3(scale, scale, scale)
+        let newScale = initialEditingScale * scale
+        editingNode?.scale = SCNVector3(newScale, newScale, newScale)
+        print("scaling with factor \(newScale)")
+    }
+    
+    func pinchDidEnd(scale: CGFloat) {
+        let newScale = initialEditingScale * scale
+        editingNode?.scale = SCNVector3(newScale, newScale, newScale)
+        initialEditingScale = 1
     }
     
     func rotationDidBegin(rotation: CGFloat) {
