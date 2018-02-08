@@ -9,6 +9,6 @@
 import Foundation
 struct Constants {
     struct Transformation {
-        static var rotationFactor : Float = 6 // Rotating 360/6 = 60 degrees on the screen will allow user to rotate 360 degrees in scene
+        static var rotationFactor : Float = -6 // Rotating 360/6 = 60 degrees on the screen will allow user to rotate 360 degrees in scene
     }
 }

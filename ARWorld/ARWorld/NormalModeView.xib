@@ -73,17 +73,12 @@
             </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
+                <outlet property="closeMenuButton" destination="FY7-09-9Ny" id="5Cy-AH-aKz"/>
                 <outlet property="newNodeButton" destination="1WX-Sb-Lsq" id="oTm-uq-0kn"/>
                 <outlet property="nodeMenuCollectionViewContainer" destination="eJi-uT-t9h" id="7F5-G3-5Iv"/>
                 <outlet property="view" destination="-1" id="65E-dY-5Lc"/>
-                <outletCollection property="gestureRecognizers" destination="4ul-na-l7d" appends="YES" id="0cO-Jf-t4t"/>
             </connections>
         </view>
-        <tapGestureRecognizer id="4ul-na-l7d">
-            <connections>
-                <action selector="handleTapGesture:" destination="iN0-l3-epB" id="Y62-6b-3JA"/>
-            </connections>
-        </tapGestureRecognizer>
     </objects>
     <resources>
         <image name="reset-icon" width="277" height="277"/>

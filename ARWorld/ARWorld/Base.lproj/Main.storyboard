@@ -42,8 +42,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="modeViewContainer" destination="Xz0-Bz-Ffn" id="DZS-H5-umE"/>
                         <outlet property="sceneView" destination="lFG-ki-0fC" id="ZUz-GL-cO9"/>
-                        <outlet property="waitingForAnchorView" destination="Xz0-Bz-Ffn" id="EOK-lZ-fcN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>

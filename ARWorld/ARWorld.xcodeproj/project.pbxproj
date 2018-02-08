@@ -18,8 +18,9 @@
 		85EC36F9202B8A250062DA7C /* MenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EC36F7202B8A250062DA7C /* MenuCollectionViewCell.swift */; };
 		85EC36FA202B8A250062DA7C /* MenuCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85EC36F8202B8A250062DA7C /* MenuCollectionViewCell.xib */; };
 		85EC36FC202B9EBE0062DA7C /* XibSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EC36FB202B9EBE0062DA7C /* XibSetup.swift */; };
-		8D7283F820252EF10099FAF3 /* ModeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7283F720252EF10099FAF3 /* ModeType.swift */; };
-		8D728400202571300099FAF3 /* MenuCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7283FF202571300099FAF3 /* MenuCollectionView.swift */; };
+		85EC36FE202CACF70062DA7C /* SudoNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EC36FD202CACF70062DA7C /* SudoNode.swift */; };
+		8D7283F820252EF10099FAF3 /* ModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7283F720252EF10099FAF3 /* ModelType.swift */; };
+		8D728400202571300099FAF3 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7283FF202571300099FAF3 /* UIViewExtensions.swift */; };
 		8DA46BFF2025210600577308 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA46BFE2025210600577308 /* AppDelegate.swift */; };
 		8DA46C012025210600577308 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DA46C002025210600577308 /* art.scnassets */; };
 		8DA46C032025210600577308 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA46C022025210600577308 /* ViewController.swift */; };
@@ -49,8 +50,9 @@
 		85EC36F7202B8A250062DA7C /* MenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCollectionViewCell.swift; sourceTree = "<group>"; };
 		85EC36F8202B8A250062DA7C /* MenuCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MenuCollectionViewCell.xib; sourceTree = "<group>"; };
 		85EC36FB202B9EBE0062DA7C /* XibSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibSetup.swift; sourceTree = "<group>"; };
-		8D7283F720252EF10099FAF3 /* ModeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeType.swift; sourceTree = "<group>"; };
-		8D7283FF202571300099FAF3 /* MenuCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCollectionView.swift; sourceTree = "<group>"; };
+		85EC36FD202CACF70062DA7C /* SudoNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SudoNode.swift; sourceTree = "<group>"; };
+		8D7283F720252EF10099FAF3 /* ModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelType.swift; sourceTree = "<group>"; };
+		8D7283FF202571300099FAF3 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		8DA46BFB2025210600577308 /* ARWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DA46BFE2025210600577308 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DA46C002025210600577308 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -91,8 +93,9 @@
 		8D7283F92025306A0099FAF3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				8D7283F720252EF10099FAF3 /* ModeType.swift */,
+				8D7283F720252EF10099FAF3 /* ModelType.swift */,
 				8DC4CFFD20257FB40004B627 /* NodeCreator.swift */,
+				85EC36FD202CACF70062DA7C /* SudoNode.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -100,7 +103,7 @@
 		8D7283FE20256F9A0099FAF3 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
-				8D7283FF202571300099FAF3 /* MenuCollectionView.swift */,
+				8D7283FF202571300099FAF3 /* UIViewExtensions.swift */,
 				85EC36F7202B8A250062DA7C /* MenuCollectionViewCell.swift */,
 				85EC36F8202B8A250062DA7C /* MenuCollectionViewCell.xib */,
 			);
@@ -320,8 +323,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D7283F820252EF10099FAF3 /* ModeType.swift in Sources */,
-				8D728400202571300099FAF3 /* MenuCollectionView.swift in Sources */,
+				8D7283F820252EF10099FAF3 /* ModelType.swift in Sources */,
+				8D728400202571300099FAF3 /* UIViewExtensions.swift in Sources */,
 				8DC4D00B2025AD8B0004B627 /* Utilities.swift in Sources */,
 				85EC36E6202B47E10062DA7C /* CalibrationView.swift in Sources */,
 				85EC36F9202B8A250062DA7C /* MenuCollectionViewCell.swift in Sources */,
@@ -330,6 +333,7 @@
 				85EC36EA202B4F570062DA7C /* WaitingForAnchorLocationView.swift in Sources */,
 				8DC4D00D2025ADBD0004B627 /* SCNVector3+Extensions.swift in Sources */,
 				8DC4CFFE20257FB40004B627 /* NodeCreator.swift in Sources */,
+				85EC36FE202CACF70062DA7C /* SudoNode.swift in Sources */,
 				85EC36F4202B667A0062DA7C /* EditingModeView.swift in Sources */,
 				A7368FD120253DC800BDC162 /* FirebaseManager.swift in Sources */,
 				85EC36FC202B9EBE0062DA7C /* XibSetup.swift in Sources */,

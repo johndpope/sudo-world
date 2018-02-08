@@ -21,10 +21,7 @@ enum InteractionMode {
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
-    @IBOutlet weak var waitingForAnchorView: UIView!
-    @IBOutlet weak var calibrationView: CalibrationView!
-    @IBOutlet weak var normalModeView: NormalModeView!
-    @IBOutlet weak var editingModeView: EditingModeView!
+    @IBOutlet weak var modeViewContainer: UIView!
     
     
     var floorAnchor: ARPlaneAnchor? // The floor the user uses to calibrate at the start
@@ -75,10 +72,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     private func setContainerViewToView(_ view: UIView) {
-        for view in waitingForAnchorView.subviews {
+        for view in modeViewContainer.subviews {
             view.removeFromSuperview()
         }
-        self.waitingForAnchorView.addSubview(view)
+        self.modeViewContainer.addSubview(view)
     }
     
     
@@ -130,7 +127,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
 
     // setting the objects
-    func setObject(asset: NodeAssetType) {
+    func setObject(asset: NodeAssetType) -> SCNNode? {
         let hit = realWorldHit(at: CGPoint(x: view.bounds.midX, y: 2 * (view.bounds.height / 3)))
         
         if let worldToHitTest = hit.transformInWorld {
@@ -142,9 +139,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 clonedNode.transform = globalNodeToHitTest
                 globalNode.addChildNode(clonedNode)
                 addSCNNodeToAllSceneNodes(node: clonedNode, assetType: asset)
+                return clonedNode
             }
 
         }
+        return nil
     }
 
     func addSCNNodeToAllSceneNodes(node: SCNNode, assetType: NodeAssetType) {
@@ -313,8 +312,9 @@ extension ViewController: FirebaseManagerDelegate {
         // add node on the scene
         self.allSceneNodes?.append(node)
         if let nodeAssetType = NodeAssetType(rawValue: node.type.rawValue),
-            let newNode = nodeAssetType.initializeNode(){
-            globalNode.addChildNode(newNode)
+            let newNode = nodeAssetType.initializeNode() {
+            newNode.transform = node.transform
+//            globalNode.addChildNode(newNode)
         }
     }
     
@@ -370,7 +370,10 @@ extension ViewController: NormalModeViewDelegate {
     }
     
     func didSelectNewNodeToInsert(assetType: NodeAssetType) {
-        setObject(asset: assetType)
+        if let newNode = setObject(asset: assetType) {
+            editingNode = newNode
+            mode = .editing
+        }
     }
     
     /// Find the same instance of target node or its parent
