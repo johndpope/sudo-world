@@ -1,5 +1,5 @@
 //
-//  MenuCollectionView.swift
+//  UIViewExtensions.swift
 //  ARWorld
 //
 //  Created by TSD044 on 2018-02-02.
@@ -8,66 +8,6 @@
 
 import Foundation
 import UIKit
-
-
-protocol MenuCollectionViewDelegate: class {
-    func didTapCell(assetType: NodeAssetType)
-}
-
-class MenuCollectionView: UICollectionView {
-    var allMenuAssets = NodeAssetType.assetTypesForMenu()
-
-    weak var menuCollectionDelegate: MenuCollectionViewDelegate?
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        self.delegate = self
-        self.dataSource = self
-    }
-}
-
-extension MenuCollectionView: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return allMenuAssets.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AssetMenuItemCell", for: indexPath) as? AssetMenuItemCell {
-            let currentMenuItem = allMenuAssets[indexPath.row]
-            cell.config(image: currentMenuItem.menuImage())
-            return cell
-        }
-        return UICollectionViewCell()
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.menuCollectionDelegate?.didTapCell(assetType: allMenuAssets[indexPath.row])
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 100, height: 100)
-    }
-}
-
-class AssetMenuItemCell: UICollectionViewCell {
-    
-    @IBOutlet weak var imageView: UIImageView!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        self.addCornerRadius()
-        self.addTopHighlight()
-        self.addGrayDiagonalShading()
-        self.addBottomShadow()
-    }
-    
-    func config(image: UIImage) {
-        self.imageView.image = image
-    }
-}
 
 extension UIView {
     static var cornerRadius: CGFloat = 30

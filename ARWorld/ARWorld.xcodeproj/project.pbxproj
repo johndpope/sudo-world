@@ -7,8 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8D7283F820252EF10099FAF3 /* ModeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7283F720252EF10099FAF3 /* ModeType.swift */; };
-		8D728400202571300099FAF3 /* MenuCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7283FF202571300099FAF3 /* MenuCollectionView.swift */; };
+		85EC36E6202B47E10062DA7C /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EC36E5202B47E10062DA7C /* CalibrationView.swift */; };
+		85EC36E8202B47F30062DA7C /* CalibrationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85EC36E7202B47F30062DA7C /* CalibrationView.xib */; };
+		85EC36EA202B4F570062DA7C /* WaitingForAnchorLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EC36E9202B4F570062DA7C /* WaitingForAnchorLocationView.swift */; };
+		85EC36EE202B4F870062DA7C /* WaitingForAnchorLocationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85EC36ED202B4F870062DA7C /* WaitingForAnchorLocationView.xib */; };
+		85EC36F0202B51FC0062DA7C /* NormalModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EC36EF202B51FC0062DA7C /* NormalModeView.swift */; };
+		85EC36F2202B520F0062DA7C /* NormalModeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85EC36F1202B520F0062DA7C /* NormalModeView.xib */; };
+		85EC36F4202B667A0062DA7C /* EditingModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EC36F3202B667A0062DA7C /* EditingModeView.swift */; };
+		85EC36F6202B66850062DA7C /* EditingModeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85EC36F5202B66850062DA7C /* EditingModeView.xib */; };
+		85EC36F9202B8A250062DA7C /* MenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EC36F7202B8A250062DA7C /* MenuCollectionViewCell.swift */; };
+		85EC36FA202B8A250062DA7C /* MenuCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85EC36F8202B8A250062DA7C /* MenuCollectionViewCell.xib */; };
+		85EC36FC202B9EBE0062DA7C /* XibSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EC36FB202B9EBE0062DA7C /* XibSetup.swift */; };
+		85EC36FE202CACF70062DA7C /* SudoNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EC36FD202CACF70062DA7C /* SudoNode.swift */; };
+		8D7283F820252EF10099FAF3 /* ModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7283F720252EF10099FAF3 /* ModelType.swift */; };
+		8D728400202571300099FAF3 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7283FF202571300099FAF3 /* UIViewExtensions.swift */; };
 		8DA46BFF2025210600577308 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA46BFE2025210600577308 /* AppDelegate.swift */; };
 		8DA46C012025210600577308 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DA46C002025210600577308 /* art.scnassets */; };
 		8DA46C032025210600577308 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA46C022025210600577308 /* ViewController.swift */; };
@@ -18,6 +30,7 @@
 		8DC4CFFE20257FB40004B627 /* NodeCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC4CFFD20257FB40004B627 /* NodeCreator.swift */; };
 		8DC4D00B2025AD8B0004B627 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC4D00A2025AD8B0004B627 /* Utilities.swift */; };
 		8DC4D00D2025ADBD0004B627 /* SCNVector3+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC4D00C2025ADBD0004B627 /* SCNVector3+Extensions.swift */; };
+		9E59129B202C068200CE593D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E59129A202C068200CE593D /* Constants.swift */; };
 		A7368FCF2025309D00BDC162 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A7368FCE2025309D00BDC162 /* GoogleService-Info.plist */; };
 		A7368FD120253DC800BDC162 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7368FD020253DC800BDC162 /* FirebaseManager.swift */; };
 		FF8FF47D9BE19B3753BBB62D /* Pods_ARWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF0F3A6677EB24016E23796 /* Pods_ARWorld.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -26,8 +39,20 @@
 /* Begin PBXFileReference section */
 		58C51BD5BA8A34F0C53DB69D /* Pods-ARWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARWorld.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ARWorld/Pods-ARWorld.debug.xcconfig"; sourceTree = "<group>"; };
 		7DF0F3A6677EB24016E23796 /* Pods_ARWorld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARWorld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8D7283F720252EF10099FAF3 /* ModeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeType.swift; sourceTree = "<group>"; };
-		8D7283FF202571300099FAF3 /* MenuCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCollectionView.swift; sourceTree = "<group>"; };
+		85EC36E5202B47E10062DA7C /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
+		85EC36E7202B47F30062DA7C /* CalibrationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalibrationView.xib; sourceTree = "<group>"; };
+		85EC36E9202B4F570062DA7C /* WaitingForAnchorLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingForAnchorLocationView.swift; sourceTree = "<group>"; };
+		85EC36ED202B4F870062DA7C /* WaitingForAnchorLocationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WaitingForAnchorLocationView.xib; sourceTree = "<group>"; };
+		85EC36EF202B51FC0062DA7C /* NormalModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalModeView.swift; sourceTree = "<group>"; };
+		85EC36F1202B520F0062DA7C /* NormalModeView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NormalModeView.xib; sourceTree = "<group>"; };
+		85EC36F3202B667A0062DA7C /* EditingModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingModeView.swift; sourceTree = "<group>"; };
+		85EC36F5202B66850062DA7C /* EditingModeView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditingModeView.xib; sourceTree = "<group>"; };
+		85EC36F7202B8A250062DA7C /* MenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCollectionViewCell.swift; sourceTree = "<group>"; };
+		85EC36F8202B8A250062DA7C /* MenuCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MenuCollectionViewCell.xib; sourceTree = "<group>"; };
+		85EC36FB202B9EBE0062DA7C /* XibSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XibSetup.swift; sourceTree = "<group>"; };
+		85EC36FD202CACF70062DA7C /* SudoNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SudoNode.swift; sourceTree = "<group>"; };
+		8D7283F720252EF10099FAF3 /* ModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelType.swift; sourceTree = "<group>"; };
+		8D7283FF202571300099FAF3 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		8DA46BFB2025210600577308 /* ARWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DA46BFE2025210600577308 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DA46C002025210600577308 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -39,6 +64,7 @@
 		8DC4CFFD20257FB40004B627 /* NodeCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeCreator.swift; sourceTree = "<group>"; };
 		8DC4D00A2025AD8B0004B627 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		8DC4D00C2025ADBD0004B627 /* SCNVector3+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SCNVector3+Extensions.swift"; sourceTree = "<group>"; };
+		9E59129A202C068200CE593D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A7368FCE2025309D00BDC162 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A7368FD020253DC800BDC162 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		F5F1FF02876CD5800BC6D4F4 /* Pods-ARWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARWorld.release.xcconfig"; path = "Pods/Target Support Files/Pods-ARWorld/Pods-ARWorld.release.xcconfig"; sourceTree = "<group>"; };
@@ -67,8 +93,9 @@
 		8D7283F92025306A0099FAF3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				8D7283F720252EF10099FAF3 /* ModeType.swift */,
+				8D7283F720252EF10099FAF3 /* ModelType.swift */,
 				8DC4CFFD20257FB40004B627 /* NodeCreator.swift */,
+				85EC36FD202CACF70062DA7C /* SudoNode.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -76,7 +103,9 @@
 		8D7283FE20256F9A0099FAF3 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
-				8D7283FF202571300099FAF3 /* MenuCollectionView.swift */,
+				8D7283FF202571300099FAF3 /* UIViewExtensions.swift */,
+				85EC36F7202B8A250062DA7C /* MenuCollectionViewCell.swift */,
+				85EC36F8202B8A250062DA7C /* MenuCollectionViewCell.xib */,
 			);
 			path = Menu;
 			sourceTree = "<group>";
@@ -113,6 +142,15 @@
 				A7368FCE2025309D00BDC162 /* GoogleService-Info.plist */,
 				8DA46C0C2025210600577308 /* Info.plist */,
 				A7368FD020253DC800BDC162 /* FirebaseManager.swift */,
+				85EC36E5202B47E10062DA7C /* CalibrationView.swift */,
+				85EC36E7202B47F30062DA7C /* CalibrationView.xib */,
+				85EC36E9202B4F570062DA7C /* WaitingForAnchorLocationView.swift */,
+				85EC36ED202B4F870062DA7C /* WaitingForAnchorLocationView.xib */,
+				85EC36EF202B51FC0062DA7C /* NormalModeView.swift */,
+				85EC36F1202B520F0062DA7C /* NormalModeView.xib */,
+				85EC36F3202B667A0062DA7C /* EditingModeView.swift */,
+				85EC36F5202B66850062DA7C /* EditingModeView.xib */,
+				85EC36FB202B9EBE0062DA7C /* XibSetup.swift */,
 			);
 			path = ARWorld;
 			sourceTree = "<group>";
@@ -121,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				8DC4D00A2025AD8B0004B627 /* Utilities.swift */,
+				9E59129A202C068200CE593D /* Constants.swift */,
 				8DC4D00C2025ADBD0004B627 /* SCNVector3+Extensions.swift */,
 			);
 			path = Utilities;
@@ -210,7 +249,12 @@
 				8DA46C0B2025210600577308 /* LaunchScreen.storyboard in Resources */,
 				A7368FCF2025309D00BDC162 /* GoogleService-Info.plist in Resources */,
 				8DA46C082025210600577308 /* Assets.xcassets in Resources */,
+				85EC36F2202B520F0062DA7C /* NormalModeView.xib in Resources */,
+				85EC36EE202B4F870062DA7C /* WaitingForAnchorLocationView.xib in Resources */,
+				85EC36F6202B66850062DA7C /* EditingModeView.xib in Resources */,
+				85EC36FA202B8A250062DA7C /* MenuCollectionViewCell.xib in Resources */,
 				8DA46C062025210600577308 /* Main.storyboard in Resources */,
+				85EC36E8202B47F30062DA7C /* CalibrationView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,12 +323,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D7283F820252EF10099FAF3 /* ModeType.swift in Sources */,
-				8D728400202571300099FAF3 /* MenuCollectionView.swift in Sources */,
+				8D7283F820252EF10099FAF3 /* ModelType.swift in Sources */,
+				8D728400202571300099FAF3 /* UIViewExtensions.swift in Sources */,
 				8DC4D00B2025AD8B0004B627 /* Utilities.swift in Sources */,
+				85EC36E6202B47E10062DA7C /* CalibrationView.swift in Sources */,
+				85EC36F9202B8A250062DA7C /* MenuCollectionViewCell.swift in Sources */,
+				9E59129B202C068200CE593D /* Constants.swift in Sources */,
+				85EC36F0202B51FC0062DA7C /* NormalModeView.swift in Sources */,
+				85EC36EA202B4F570062DA7C /* WaitingForAnchorLocationView.swift in Sources */,
 				8DC4D00D2025ADBD0004B627 /* SCNVector3+Extensions.swift in Sources */,
 				8DC4CFFE20257FB40004B627 /* NodeCreator.swift in Sources */,
+				85EC36FE202CACF70062DA7C /* SudoNode.swift in Sources */,
+				85EC36F4202B667A0062DA7C /* EditingModeView.swift in Sources */,
 				A7368FD120253DC800BDC162 /* FirebaseManager.swift in Sources */,
+				85EC36FC202B9EBE0062DA7C /* XibSetup.swift in Sources */,
 				8DA46C032025210600577308 /* ViewController.swift in Sources */,
 				8DA46BFF2025210600577308 /* AppDelegate.swift in Sources */,
 			);
@@ -425,11 +477,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 66T4X4PK9Q;
+				DEVELOPMENT_TEAM = S44R85Y9ZG;
 				INFOPLIST_FILE = ARWorld/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.sudo-world.ARWorld11";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sudo-world.ARWorld5";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -442,11 +494,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 66T4X4PK9Q;
+				DEVELOPMENT_TEAM = S44R85Y9ZG;
 				INFOPLIST_FILE = ARWorld/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.sudo-world.ARWorld11";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sudo-world.ARWorld5";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

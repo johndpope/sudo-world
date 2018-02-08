@@ -13,14 +13,16 @@ import ARKit
 enum InteractionMode {
     case waitingForAnchorLocation
     case draggingAnchorDirection
-    case waitingForSettingNewObject
+    case normal
+    case editing
 //    case draggingNewObject
 }
 
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
-    @IBOutlet weak var menuCollectionView: MenuCollectionView!
+    @IBOutlet weak var modeViewContainer: UIView!
+    
     
     var floorAnchor: ARPlaneAnchor? // The floor the user uses to calibrate at the start
     var globalNode = GlobalNodeClass() // Anchored on start of the real life arrow
@@ -28,30 +30,61 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var panGesture: UIPanGestureRecognizer!
     var tapGesture: UITapGestureRecognizer!
 
-    var currentNodeTypeBeingAdded: NodeAssetType = .box
+    var editingNode: SudoNode? {
+        willSet {
+            newValue?.sceneNode.pivot
+        }
+    }
+    var initialEditingScale: CGFloat = 1
+    var previousRotation: CGFloat? = nil
     
-    var allSceneNodes: [SceneNode]?
+//    var allSceneNodes: [FirebaseNode]?
     var allMenuAssets = [NodeAssetType]()
 
-    var allNodesDisplayed = [SCNNode]() // Populated from firebase
+//    var allNodesDisplayed = [SCNNode]() // Populated from firebase
+    var nodes = [SudoNode]()
+    
     
     var mode: InteractionMode = .waitingForAnchorLocation {
         didSet {
             switch mode {
             case .waitingForAnchorLocation:
                 hitTestPlane.isHidden = true
+                let newView = WaitingForAnchorLocationView.initFromNib() as! WaitingForAnchorLocationView
+                newView.delegate = self
+                setContainerViewToView(newView)
 
             case  .draggingAnchorDirection:
+                let newView = CalibrationView.initFromNib() as! CalibrationView
+                newView.delegate = self
+                setContainerViewToView(newView)
                 hitTestPlane.isHidden = false
                 hitTestPlane.position = .zero
                 hitTestPlane.boundingBox.min = SCNVector3(x: -1000, y: 0, z: -1000)
                 hitTestPlane.boundingBox.max = SCNVector3(x: 1000, y: 0, z: 1000)
                 
-            case .waitingForSettingNewObject:
+            case .normal:
+                self.hitTestPlane.isHidden = true
+                let newView = NormalModeView.initFromNib() as! NormalModeView
+                newView.delegate = self
+                setContainerViewToView(newView)
+                break
+            case .editing:
+                let newView = EditingModeView.initFromNib() as! EditingModeView
+                newView.delegate = self
+                setContainerViewToView(newView)
                 break
             }
         }
     }
+    
+    private func setContainerViewToView(_ view: UIView) {
+        for view in modeViewContainer.subviews {
+            view.removeFromSuperview()
+        }
+        self.modeViewContainer.addSubview(view)
+    }
+    
     
     var configuration: ARWorldTrackingConfiguration {
         let configuration = ARWorldTrackingConfiguration()
@@ -63,17 +96,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         super.viewDidLoad()
         configSceneView(sceneView: sceneView)
         
-        panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-        sceneView.addGestureRecognizer(panGesture)
-        
-        tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        sceneView.addGestureRecognizer(tapGesture)
-        FirebaseManager.shared.getCurrentDatabase { (sceneNodes) in
-            self.allSceneNodes = sceneNodes
+        FirebaseManager.shared.getCurrentDatabase { (fbNodes) in
+            if let fbNodes = fbNodes {
+                self.nodes = fbNodes.map({SudoNode(fbNode: $0)})
+            }
         }
         resetNodes()
-        
-        menuCollectionView.menuCollectionDelegate = self
     }
     
     func resetNodes() {
@@ -92,7 +120,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func configSceneView(sceneView: ARSCNView) {
         sceneView.delegate = self
 //        sceneView.showsStatistics = true
-        sceneView.debugOptions  = [.showConstraints, ARSCNDebugOptions.showFeaturePoints]
+//        sceneView.debugOptions  = [.showConstraints, ARSCNDebugOptions.showFeaturePoints]
         // ARSCNDebugOptions.showWorldOrigin
     }
 
@@ -106,108 +134,49 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.pause()
     }
 
-    // MARK: - Touch handling
-    
-    var isCollectionViewActionEnabled = true
-    
-    @objc dynamic func handleTap(_ gestureRecognizer: UITapGestureRecognizer) {
-        switch mode {
-        case .waitingForAnchorLocation:
-            break
-        case .draggingAnchorDirection:
-            break
-        case .waitingForSettingNewObject:
-            isCollectionViewActionEnabled = false
-            setObject(gestureRecognizer)
-            isCollectionViewActionEnabled = true
-            break
-        }
-    }
-    
-    @objc dynamic func handlePan(_ gestureRecognizer: UIPanGestureRecognizer) {
-        switch mode {
-        case .waitingForAnchorLocation:
-            findStartingLocation(gestureRecognizer)
-        case .draggingAnchorDirection:
-            handleInitialCalibrationDrag(gestureRecognizer)
-        case .waitingForSettingNewObject:
-            break
-        }
-    }
-
     // setting the objects
-    func setObject(_ gestureRecognizer: UITapGestureRecognizer) {
-        let touchPos = gestureRecognizer.location(in: sceneView)
-        let hit = realWorldHit(at: touchPos)
+    func setObject(asset: NodeAssetType) -> SudoNode? {
+        let hit = realWorldHit(at: CGPoint(x: view.bounds.midX, y: 2 * (view.bounds.height / 3)))
         
         if let worldToHitTest = hit.transformInWorld {
             
-            if let clonedNode = currentNodeTypeBeingAdded.initializeNode() {
-                print("adding node \(currentNodeTypeBeingAdded)")
+            if let clonedNode = asset.initializeNode() {
                 let globalNodeToWorld = SCNMatrix4Invert(globalNode.transform)
                 let globalNodeToHitTest = SCNMatrix4Mult(worldToHitTest, globalNodeToWorld)
                 
                 clonedNode.transform = globalNodeToHitTest
-                globalNode.addChildNode(clonedNode)
-                addSCNNodeToAllSceneNodes(node: clonedNode)
+                let sudoNode = SudoNode(sceneNode: clonedNode, type: asset)
+                addNodeToNodes(node: sudoNode)
+                return sudoNode
             }
-
         }
-    }
-
-    func addSCNNodeToAllSceneNodes(node: SCNNode) {
-        if let name = node.name {
-            let sceneNode = FirebaseManager.shared.insertNode(type: currentNodeTypeBeingAdded, transform: node.transform)
-            allSceneNodes?.append(sceneNode)
-        }
+        return nil
     }
     
     var axisNode = NodeCreator.createAxesNode(quiverLength: 0.7, quiverThickness: 1)
     
-    func findStartingLocation(_ gestureRecognizer: UIPanGestureRecognizer) {
-        switch gestureRecognizer.state {
-        case .began, .changed:
-            // Use real-world ARKit coordinates to determine where to start drawing
-            let touchPos = gestureRecognizer.location(in: sceneView)
-            let hit = realWorldHit(at: touchPos)
-            if let hitTransformInWorld = hit.transformInWorld, let plane = hit.planeAnchor {
-                // Once the user hits a usable real-world plane, switch into line-dragging mode
-                globalNode.isHidden = false
-                globalNode.transform = hitTransformInWorld
-                floorAnchor = plane
-                mode = .draggingAnchorDirection
-            }
-        default:
-            break
+    func findStartingLocation(location: CGPoint) {
+        // Use real-world ARKit coordinates to determine where to start drawing
+        let touchPos = location
+        let hit = realWorldHit(at: touchPos)
+        if let hitTransformInWorld = hit.transformInWorld, let plane = hit.planeAnchor {
+            // Once the user hits a usable real-world plane, switch into line-dragging mode
+            globalNode.isHidden = false
+            globalNode.transform = hitTransformInWorld
+            floorAnchor = plane
+            mode = .draggingAnchorDirection
         }
     }
     
-    func handleInitialCalibrationDrag(_ gestureRecognizer: UIPanGestureRecognizer) {
-        switch gestureRecognizer.state {
-        case .changed:
-            
-            let touchPos = gestureRecognizer.location(in: sceneView)
-            if let hitTestlocationInWorld = scenekitHit(at: touchPos, within: hitTestPlane) {
-                let delta = globalNode.position - hitTestlocationInWorld
-                let distance = delta.length
-                let angleInRadians = atan2(delta.z, delta.x)
-                self.globalNode.setAttachedGeometryWidth(endpointInWorld: hitTestlocationInWorld, newWidth: distance)
-               globalNode.rotation = SCNVector4(x: 0, y: 1, z: 0, w: -(angleInRadians + Float.pi))
-            }
-        case .ended, .cancelled:
-            print("gesture rec ENDED OR CANCELED")
-
-            // TODO if we have time
-            // Check that the length is around the same length as our physical arrow
-//            if abs(globalNode.boundingBox.max.x - globalNode.boundingBox.min.x) >= globalNode.minLabelDistanceThreshold {
-//                // If the box ended up with a usable width, switch to length-dragging mode.
-//                mode = .draggingInitialLength
-//            } else {
-//                // Otherwise, give up on this drag and start again.
-//                resetBox()
-//            }
-        default:
-            break
+    func handleInitialCalibrationDrag(location: CGPoint) {
+        
+        let touchPos = location
+        if let hitTestlocationInWorld = scenekitHit(at: touchPos, within: hitTestPlane) {
+            let delta = globalNode.position - hitTestlocationInWorld
+            let distance = delta.length
+            let angleInRadians = atan2(delta.z, delta.x)
+            self.globalNode.setAttachedGeometryWidth(endpointInWorld: hitTestlocationInWorld, newWidth: distance)
+            globalNode.rotation = SCNVector4(x: 0, y: 1, z: 0, w: -(angleInRadians + Float.pi))
         }
     }
     
@@ -288,15 +257,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     // MARK: - ARSCNViewDelegate
     
-
-    // Override to create and configure nodes for anchors added to the view's session.
-//    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-//        guard let planeAnchor = anchor as? ARPlaneAnchor else { return nil }
-//    }
-    
-//    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-//    }
-    
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
         print("didAdd \(node.position)")
@@ -315,45 +275,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         if let plane = node.childNodes.first?.geometry as? SCNPlane {
             plane.updateSize(toMatch: planeAnchor)
         }
-        
-//        if planeAnchor == floorAnchor {
-//            let oldPos = node.position
-//            let newPos = SCNVector3.positionFromTransform(planeAnchor.transform)
-//            let delta = newPos - oldPos
-//            globalNode.position += delta
-//        }
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {//
         print("didRemove \(node.position)")
     }
-    
-    // MARK: IB Actions
-    @IBAction func resetButtonTapped(_ sender: Any) {
-        self.restartSession()
-    }
 
     // calibration finishes
-    @IBAction func calibrationCompleteButton(_ sender: Any) {
-        if mode == .draggingAnchorDirection {
-            print("waitingForSettingNewObject MODE")
-            mode = .waitingForSettingNewObject
-
-            displayAllInitialNodes()
-            FirebaseManager.shared.observeOnDelegate(self)
+    func addAllNodesToGlobalNode() {
+        for node in nodes {
+            globalNode.addChildNode(node.sceneNode)
         }
     }
-
-    func displayAllInitialNodes() {
-        if let allSceneNodes = self.allSceneNodes {
-            for sceneNode in allSceneNodes {
-                let nodeAssetType = NodeAssetType(rawValue: sceneNode.type.rawValue)!
-                if let node = nodeAssetType.initializeNode() {
-                    node.transform = sceneNode.transform
-                    globalNode.addChildNode(node)
-                }
-            }
-        }
+    
+    func addNodeToNodes(node: SudoNode) {
+        nodes.append(node)
+        globalNode.addChildNode(node.sceneNode)
     }
     
     private func restartSession() {
@@ -366,74 +303,167 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
         self.sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }
-
-//    // place a model at the hit test result location
-//    private func placeModel(modelType: String, assetExtension: String, hitTestInWorld: SCNMatrix4) {
-//        // Get transform of result
-//        // Define hitTestInWorld as it means hitTestInWorldCoordinate, etc
-//
-//        //        let hitTestInWorld = position
-//
-//        let globalNodeInWorld = g!.worldTransform
-//
-//        let globalNodeInWorld_Inv = SCNMatrix4Invert(globalNodeInWorld)
-//
-//        let hitTestInGlobalNode = matrix_float4x4(SCNMatrix4Mult(hitTestInWorld, globalNodeInWorld_Inv))
-//
-//        let
-//
-//        // Get position from transform (4th column of transformation matrix)
-//        //        let hitTestInGlobalNode_Position = SCNVector3Make(hitTestInGlobalNode.columns.3.x, hitTestInGlobalNode.columns.3.y, hitTestInGlobalNode.columns.3.z)
-//
-//        let hitTestInGlobalNode_Position = SCNVector3Make(hitTestInGlobalNode.columns.3.x, hitTestInGlobalNode.columns.3.y, hitTestInGlobalNode.columns.3.z)
-//
-//
-//        // Add box
-//        let modelNode = createNodeFromAsset(assetType: modelType, assetExtension: assetExtension, position: hitTestInGlobalNode_Position)!
-//
-//        globalNode?.addChildNode(modelNode)
-//    }
-
-//    private func createNodeFromAsset(assetType: String, assetExtension: String, transform: SCNMatrix4) -> SCNNode? {
-//
-//        guard let url = Bundle.main.url(forResource: "art.scnassets/\(assetType)", withExtension: assetExtension) else {
-//            NSLog("Could not find door scene")
-//            return nil
-//        }
-//        guard let node = SCNReferenceNode(url: url) else { return nil }
-//
-//        node.load()
-//
-//        // Position scene
-//        node.name = currentNodeTypeBeingAdded.rawValue
-//        node.transform = transform
-//
-//        return node
-//    }
-}
-
-extension ViewController: MenuCollectionViewDelegate {
-    func didTapCell(assetType: NodeAssetType) {
-        currentNodeTypeBeingAdded = assetType
-    }
 }
 
 extension ViewController: FirebaseManagerDelegate {
-    func didAddNode(node: SceneNode) {
+    func didAddNode(node: FirebaseNode) {
         // add node on the scene
-        self.allSceneNodes?.append(node)
-        if let nodeAssetType = NodeAssetType(rawValue: node.type.rawValue),
-            let newNode = nodeAssetType.initializeNode(){
-            globalNode.addChildNode(newNode)
+        let sudoNode = SudoNode(fbNode: node)
+        if !nodes.contains(sudoNode) {
+            addNodeToNodes(node: sudoNode)
         }
     }
     
-    func didChangeNode(node: SceneNode) {
-        // change node on the scene
-        
+    func didChangeNode(node: FirebaseNode) {
+        didRemoveNode(id: node.id)
+        let newSudoNode = SudoNode(fbNode: node)
+        addNodeToNodes(node: newSudoNode)
     }
 
     func didRemoveNode(id: String) {
-        // remove node on the scene
+        let ids = nodes.map({$0.id})
+        if let index = ids.index(of: id) {
+            let oldNode = nodes[index]
+            oldNode.sceneNode.removeFromParentNode()
+            nodes.remove(at: index)
+        }
     }
+}
+
+extension ViewController: WaitingForAnchorLocationViewDelegate {
+    
+    func panGestureBeganOrChanged(screenCoordinates: CGPoint) {
+        findStartingLocation(location: screenCoordinates)
+    }
+    
+}
+
+extension ViewController: CalibrationViewDelegate {
+    
+    func calibrationPanGestureBegan(screenCoordinates: CGPoint) {
+        handleInitialCalibrationDrag(location: screenCoordinates)
+    }
+    
+    func calibrationPanGestureChanged(screenCoordinates: CGPoint) {
+        handleInitialCalibrationDrag(location: screenCoordinates)
+    }
+    
+    func calibrationDone() {
+        mode = .normal
+        addAllNodesToGlobalNode()
+        FirebaseManager.shared.observeOnDelegate(self)
+        globalNode.geometry = nil
+    }
+    
+    
+}
+
+extension ViewController: NormalModeViewDelegate {
+    func didRecieveTap(screenLocation: CGPoint) {
+        let hit = sceneView.hitTest(screenLocation, options: nil)
+        
+        for hitTestResult in hit {
+            if let parentNode = findNode(targetNode: hitTestResult.node, in: nodes) {
+                self.editingNode = parentNode
+                print("Hit Test Result: \(editingNode.debugDescription)")
+                mode = .editing
+            }
+            return
+        }
+    }
+    
+    func resetRequested() {
+        restartSession()
+    }
+    
+    func didSelectNewNodeToInsert(assetType: NodeAssetType) {
+        if let newNode = setObject(asset: assetType) {
+            editingNode = newNode
+            mode = .editing
+        }
+    }
+    
+    /// Find the same instance of target node or its parent
+    func findNode(targetNode: SCNNode, in nodes: [SudoNode]) -> SudoNode? {
+        for node in nodes {
+            if let _ = findNode(targetNode: targetNode, in: [node.sceneNode]) {
+                return node
+            }
+        }
+        return nil
+    }
+    
+    func findNode(targetNode: SCNNode, in nodes: [SCNNode]) -> SCNNode? {
+        return nodes.filter {
+            return $0 === targetNode || findNode(targetNode: targetNode, in: $0.childNodes) != nil
+        }.first
+    }
+}
+
+extension ViewController: EditingModeViewDelegate {
+    
+    func editPanDidChange(screenCoordinates: CGPoint) {
+        if let hitTestTransformInWorld = realWorldHit(at: screenCoordinates).transformInWorld {
+            let hitTestPositionInWorld = SCNVector3(hitTestTransformInWorld.m41, hitTestTransformInWorld.m42, hitTestTransformInWorld.m43)
+            editingNode?.worldPosition = hitTestPositionInWorld
+        }
+    }
+    
+    func pinchDidBegin(scale: CGFloat) {
+        initialEditingScale = CGFloat(editingNode?.scale.x ?? 1)
+        let newScale = initialEditingScale * scale
+        editingNode?.scale = SCNVector3(newScale, newScale, newScale)
+         print("scaling with factor \(scale)")
+    }
+    
+    func pinchDidChange(scale: CGFloat) {
+        let newScale = initialEditingScale * scale
+        editingNode?.scale = SCNVector3(newScale, newScale, newScale)
+        print("scaling with factor \(newScale)")
+    }
+    
+    func pinchDidEnd(scale: CGFloat) {
+        let newScale = initialEditingScale * scale
+        editingNode?.scale = SCNVector3(newScale, newScale, newScale)
+        initialEditingScale = 1
+    }
+    
+    func rotationDidBegin(rotation: CGFloat) {
+        previousRotation = rotation
+    }
+    
+    func rotationDidChange(rotation: CGFloat) {
+        guard let previousRotation = previousRotation else {
+            return
+        }
+        
+        let rotationDelta = rotation - previousRotation
+        print("rotation with angle \(rotationDelta)")
+        
+        if let node = editingNode {
+            node.eulerAngles.setAxis(.y, to: node.eulerAngles.y + Float(rotationDelta) * Constants.Transformation.rotationFactor)
+        }
+        self.previousRotation = rotation
+    }
+    
+    func rotationDidEnd(rotation: CGFloat) {
+        previousRotation = nil
+    }
+    
+    func doneButtonPressed() {
+        editingNode?.pushChanges()
+        editingNode = nil
+        mode = .normal
+    }
+    
+    func trashButtonPressed() {
+        if let node = editingNode {
+            node.sceneNode.removeFromParentNode()
+            FirebaseManager.shared.deleteNode(node: node.fireBaseNode)
+        }
+        editingNode = nil
+        mode = .normal
+    }
+    
+    
 }

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="EditingModeView" customModule="ARWorld" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="DFg-jN-lhL">
+                    <rect key="frame" x="0.0" y="607" width="375" height="40"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nUe-CF-gLm">
+                            <rect key="frame" x="0.0" y="5" width="187.5" height="30"/>
+                            <state key="normal" title="Trash"/>
+                            <connections>
+                                <action selector="TrashButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="dw9-sU-5yc"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBW-Xg-Sej">
+                            <rect key="frame" x="187.5" y="5" width="187.5" height="30"/>
+                            <state key="normal" title="Done"/>
+                            <connections>
+                                <action selector="doneButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="RYn-Xl-kQz"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="eWf-md-AX7"/>
+                    </constraints>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <gestureRecognizers/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="DFg-jN-lhL" secondAttribute="bottom" constant="20" id="MPz-eg-CYT"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="DFg-jN-lhL" secondAttribute="trailing" id="ZQg-cZ-0Vq"/>
+                <constraint firstItem="DFg-jN-lhL" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="ip7-lq-tlD"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="panGestureRecognizer" destination="aCz-i4-rj9" id="Mxo-hU-l1k"/>
+                <outlet property="pinchGestureRecognizer" destination="o6r-vz-WXI" id="7pu-5l-xnT"/>
+                <outlet property="rotationGestureRecognizer" destination="lHq-Bi-Ib5" id="89I-uC-q2n"/>
+                <outlet property="tapGestureRecognizer" destination="9JJ-oS-goS" id="NjX-zl-w32"/>
+                <outlet property="view" destination="-1" id="U0v-bp-3uw"/>
+                <outletCollection property="gestureRecognizers" destination="aCz-i4-rj9" appends="YES" id="kLx-eh-33t"/>
+                <outletCollection property="gestureRecognizers" destination="o6r-vz-WXI" appends="YES" id="vcn-un-XSP"/>
+                <outletCollection property="gestureRecognizers" destination="lHq-Bi-Ib5" appends="YES" id="BGN-gH-J8f"/>
+                <outletCollection property="gestureRecognizers" destination="9JJ-oS-goS" appends="YES" id="dmt-Ra-BFA"/>
+            </connections>
+        </view>
+        <panGestureRecognizer minimumNumberOfTouches="1" id="aCz-i4-rj9">
+            <connections>
+                <action selector="handlePan:" destination="iN0-l3-epB" id="hD6-Fw-UZh"/>
+            </connections>
+        </panGestureRecognizer>
+        <pinchGestureRecognizer id="o6r-vz-WXI">
+            <connections>
+                <action selector="handlePinchGesture:" destination="iN0-l3-epB" id="fIF-23-h4p"/>
+            </connections>
+        </pinchGestureRecognizer>
+        <rotationGestureRecognizer id="lHq-Bi-Ib5">
+            <connections>
+                <action selector="handleRotationGesture:" destination="iN0-l3-epB" id="tri-tK-9b1"/>
+            </connections>
+        </rotationGestureRecognizer>
+        <tapGestureRecognizer id="9JJ-oS-goS">
+            <connections>
+                <action selector="handleTap:" destination="iN0-l3-epB" id="9KQ-ma-OM8"/>
+            </connections>
+        </tapGestureRecognizer>
+    </objects>
+</document>
