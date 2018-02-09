@@ -47,14 +47,7 @@ class EditingModeView: UIView {
     
     weak var delegate: EditingModeViewDelegate?
     
-    
-//    required init?(coder aDecoder: NSCoder) {
-//        super.init(coder: aDecoder)
-//        
-//        let _ = Bundle.main.loadNibNamed(String(describing: EditingModeView.self), owner: self, options: nil)![0] as! UIView
-//        self.view.frame = self.bounds
-//        self.addSubview(self.view)
-//    }
+    var previousRotation: CGFloat? // set to nil when editing completes
     
     @IBAction func doneButtonPressed(_ sender: UIButton) {
         delegate?.doneButtonPressed()
@@ -69,11 +62,13 @@ class EditingModeView: UIView {
     }
     
     @IBAction func handleRotationGesture(_ sender: UIRotationGestureRecognizer) {
+        print("rotation gesture received")
         switch sender.state {
         case .began:
             tapGestureRecognizer.isEnabled = false
 //            pinchGestureRecognizer.isEnabled = false
             panGestureRecognizer.isEnabled = false
+            previousRotation = sender.rotation
             delegate?.rotationDidBegin(rotation: sender.rotation)
             break
         case .changed:
@@ -89,6 +84,7 @@ class EditingModeView: UIView {
             break
         }
     }
+    
     @IBAction func handlePinchGesture(_ sender: UIPinchGestureRecognizer) {
         switch sender.state {
         case .began:

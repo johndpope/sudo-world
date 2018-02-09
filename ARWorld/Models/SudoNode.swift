@@ -10,7 +10,6 @@ import UIKit
 import ARKit
 
 class SudoNode: Equatable {
-    
 
     let nodeAssetType: NodeAssetType
     var fireBaseNode: FirebaseNode

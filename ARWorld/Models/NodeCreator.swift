@@ -97,9 +97,21 @@ struct NodeCreator {
         return node
     }
     
+    static var editingCircle: SCNNode {
+        let rootNode = SCNScene(named: "art.scnassets/EditingCircle.scn")!.rootNode
+        let circle = rootNode.childNode(withName: "editingCircle", recursively: false)!
+        return circle
+    }
+    
+    static func editingCircleScaledToFit(maxSize: Float) -> SCNNode {
+        let circle = editingCircle
+        circle.scale = SCNVector3.init(maxSize, 0, maxSize)
+        return circle
+    }
+    
     static func bluePlane(anchor: ARPlaneAnchor) -> SCNNode {
         let plane = SCNPlane(width: CGFloat(anchor.extent.x), height: CGFloat(anchor.extent.z))
-        plane.firstMaterial?.diffuse.contents = #colorLiteral(red: 0, green: 0.7457480216, blue: 1, alpha: 0.6324111729)
+        plane.firstMaterial?.diffuse.contents = #colorLiteral(red: 0, green: 0.7457480216, blue: 1, alpha: 0.3189944402)
         
         let planeNode = SCNNode()
         planeNode.geometry = plane

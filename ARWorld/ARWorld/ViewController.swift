@@ -24,25 +24,47 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var modeViewContainer: UIView!
     
     
-    var floorAnchor: ARPlaneAnchor? // The floor the user uses to calibrate at the start
+    // nodes presented in the scene
     var globalNode = GlobalNodeClass() // Anchored on start of the real life arrow
-    var hitTestPlane = SCNNode()
-    var panGesture: UIPanGestureRecognizer!
-    var tapGesture: UITapGestureRecognizer!
 
+    var nodes = [SudoNode]()
+    
+    var floorAnchor: ARPlaneAnchor? // The floor the user uses to calibrate at the start
+    var hitTestPlane = SCNNode()
+    
+    
     var editingNode: SudoNode? {
         willSet {
-            newValue?.sceneNode.pivot
+            if let newNode = newValue?.sceneNode {
+                newNode.addAnimation(bouncingAnimation, forKey: "SelectionBouncingAnimation")
+                print("Bounding Box \(newNode.boundingBox)")
+                newNode.addChildNode(NodeCreator.editingCircleScaledToFit(maxSize: 0.5))
+            }
+            editingNode?.sceneNode.removeAnimation(forKey: "SelectionBouncingAnimation")
+            let circle = editingNode?.sceneNode.childNode(withName: "editingCircle", recursively: true)
+            circle?.removeFromParentNode()
         }
     }
+    
+    var bouncingAnimation: CABasicAnimation {
+        let animation = CABasicAnimation(keyPath: "pivot")
+        animation.fromValue = SCNMatrix4Identity
+        animation.toValue = SCNMatrix4Translate(SCNMatrix4Identity, 0, -0.25, 0)
+        animation.duration = 0.8
+        animation.autoreverses = true
+        animation.repeatCount = .infinity
+        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        return animation
+    }
+    
     var initialEditingScale: CGFloat = 1
+    
+    
     var previousRotation: CGFloat? = nil
     
-//    var allSceneNodes: [FirebaseNode]?
+    // assets vars
     var allMenuAssets = [NodeAssetType]()
-
-//    var allNodesDisplayed = [SCNNode]() // Populated from firebase
-    var nodes = [SudoNode]()
+    
     
     
     var mode: InteractionMode = .waitingForAnchorLocation {
@@ -120,7 +142,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func configSceneView(sceneView: ARSCNView) {
         sceneView.delegate = self
 //        sceneView.showsStatistics = true
-//        sceneView.debugOptions  = [.showConstraints, ARSCNDebugOptions.showFeaturePoints]
+        sceneView.debugOptions  = [.showConstraints, ARSCNDebugOptions.showFeaturePoints]
         // ARSCNDebugOptions.showWorldOrigin
     }
 
@@ -200,7 +222,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // 1. Always do a hit test against exisiting plane anchors first.
         //    (If any such anchors exist & only within their extents.)
         
-        let planeHitTestResults = sceneView.hitTest(screenPos, types: .existingPlaneUsingExtent)
+        
+        
+        let planeHitTestResults = sceneView.hitTest(screenPos, types: [.existingPlaneUsingExtent]) // .existingPlane will assume a bigger plane (altho not infinite), but it created other problems we saw in hackathon, show us the problems, we will figure if we can do something about it
         if let result = planeHitTestResults.first {
             
 //            let planeHitTestPosition = SCNVector3.positionFromTransform(result.worldTransform)
@@ -237,18 +261,31 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             return (featureHitTestTransform, nil, false)
         }
         
-        // -------------------------------------------------------------------------------
-        // 5. As a last resort, perform a second, unfiltered hit test against features.
-        //    If there are no features in the scene, the result returned here will be nil.
-        
-        let unfilteredFeatureHitTestResults = sceneView.hitTestWithFeatures(screenPos)
-        if !unfilteredFeatureHitTestResults.isEmpty {
-            let result = unfilteredFeatureHitTestResults[0]
-            
-            let sketchyResult = SCNMatrix4MakeTranslation(result.position.x, result.position.y, result.position.z)
-
-            return (sketchyResult, nil, false)
+        // _______________________________________________________________________________
+        // 5. If there are no high quality feature points to use, then infer existing position
+        // on the lowest existing plane assuming that is will be the floor.
+        let extendedPlaneHitTestResults = sceneView.hitTest(screenPos, types: [.existingPlane])
+        let sortedResults = extendedPlaneHitTestResults.sorted { (a, b) -> Bool in
+            return a.worldTransform.position.y <= b.worldTransform.position.y ? true : false
         }
+        if let result = sortedResults.first {
+            let planeAnchor = result.anchor
+            
+            return (SCNMatrix4(result.worldTransform), planeAnchor as? ARPlaneAnchor, true)
+        }
+        
+//        // -------------------------------------------------------------------------------
+//        // 6. As a last resort, perform a second, unfiltered hit test against features.
+//        //    If there are no features in the scene, the result returned here will be nil.
+//
+//        let unfilteredFeatureHitTestResults = sceneView.hitTestWithFeatures(screenPos)
+//        if !unfilteredFeatureHitTestResults.isEmpty {
+//            let result = unfilteredFeatureHitTestResults[0]
+//
+//            let sketchyResult = SCNMatrix4MakeTranslation(result.position.x, result.position.y, result.position.z)
+//
+//            return (sketchyResult, nil, false)
+//        }
         
         return (nil, nil, false)
     }
