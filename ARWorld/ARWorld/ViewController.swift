@@ -35,27 +35,43 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     var editingNode: SudoNode? {
         willSet {
-            if let newNode = newValue?.sceneNode {
-                newNode.addAnimation(bouncingAnimation, forKey: "SelectionBouncingAnimation")
-                print("Bounding Box \(newNode.boundingBox)")
-                newNode.addChildNode(NodeCreator.editingCircleScaledToFit(maxSize: 0.5))
+            if let newAssetNode = newValue?.assetNode {
+                newAssetNode.addAnimation(bouncingAnimation, forKey: "SelectionBouncingAnimation")
+                
             }
-            editingNode?.sceneNode.removeAnimation(forKey: "SelectionBouncingAnimation")
+            if let newSceneNode = newValue?.sceneNode {
+                newSceneNode.addChildNode(NodeCreator.editingCircleScaledToFit(maxSize: 0.5))
+            }
+            editingNode?.assetNode.removeAnimation(forKey: "SelectionBouncingAnimation")
+            if let oldNode = editingNode?.assetNode {
+                oldNode.addAnimation(droppingAnimation(startingValue: oldNode.pivot), forKey: "DroppingAnimation")
+            }
             let circle = editingNode?.sceneNode.childNode(withName: "editingCircle", recursively: true)
-            circle?.removeFromParentNode()
+            circle?.shrinkAndRemove()
         }
     }
     
     var bouncingAnimation: CABasicAnimation {
         let animation = CABasicAnimation(keyPath: "pivot")
         animation.fromValue = SCNMatrix4Identity
-        animation.toValue = SCNMatrix4Translate(SCNMatrix4Identity, 0, -0.25, 0)
-        animation.duration = 0.8
+        animation.toValue = SCNMatrix4Translate(SCNMatrix4Identity, 0, -0.2, 0)
+        animation.duration = 1.2
         animation.autoreverses = true
         animation.repeatCount = .infinity
         animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         return animation
     }
+    
+    func droppingAnimation(startingValue: SCNMatrix4) -> CABasicAnimation {
+        let animation = CABasicAnimation(keyPath: "pivot")
+        animation.fromValue = SCNMatrix4Translate(SCNMatrix4Identity, 0, -0.2, 0)
+        animation.toValue = SCNMatrix4Identity
+        animation.duration = 0.1
+        animation.isRemovedOnCompletion = true
+        animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
+        return animation
+    }
+    
     
     var initialEditingScale: CGFloat = 1
     

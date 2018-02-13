@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		85A9A51E202E357F007E27B7 /* SCNNode + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85A9A51D202E357F007E27B7 /* SCNNode + Extensions.swift */; };
 		85EC36E6202B47E10062DA7C /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EC36E5202B47E10062DA7C /* CalibrationView.swift */; };
 		85EC36E8202B47F30062DA7C /* CalibrationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85EC36E7202B47F30062DA7C /* CalibrationView.xib */; };
 		85EC36EA202B4F570062DA7C /* WaitingForAnchorLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EC36E9202B4F570062DA7C /* WaitingForAnchorLocationView.swift */; };
@@ -39,6 +40,7 @@
 /* Begin PBXFileReference section */
 		58C51BD5BA8A34F0C53DB69D /* Pods-ARWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARWorld.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ARWorld/Pods-ARWorld.debug.xcconfig"; sourceTree = "<group>"; };
 		7DF0F3A6677EB24016E23796 /* Pods_ARWorld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARWorld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		85A9A51D202E357F007E27B7 /* SCNNode + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCNNode + Extensions.swift"; sourceTree = "<group>"; };
 		85EC36E5202B47E10062DA7C /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
 		85EC36E7202B47F30062DA7C /* CalibrationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalibrationView.xib; sourceTree = "<group>"; };
 		85EC36E9202B4F570062DA7C /* WaitingForAnchorLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingForAnchorLocationView.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 				8DC4D00A2025AD8B0004B627 /* Utilities.swift */,
 				9E59129A202C068200CE593D /* Constants.swift */,
 				8DC4D00C2025ADBD0004B627 /* SCNVector3+Extensions.swift */,
+				85A9A51D202E357F007E27B7 /* SCNNode + Extensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 			files = (
 				8D7283F820252EF10099FAF3 /* ModelType.swift in Sources */,
 				8D728400202571300099FAF3 /* UIViewExtensions.swift in Sources */,
+				85A9A51E202E357F007E27B7 /* SCNNode + Extensions.swift in Sources */,
 				8DC4D00B2025AD8B0004B627 /* Utilities.swift in Sources */,
 				85EC36E6202B47E10062DA7C /* CalibrationView.swift in Sources */,
 				85EC36F9202B8A250062DA7C /* MenuCollectionViewCell.swift in Sources */,

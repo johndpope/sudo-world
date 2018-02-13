@@ -13,6 +13,7 @@ class SudoNode: Equatable {
 
     let nodeAssetType: NodeAssetType
     var fireBaseNode: FirebaseNode
+    var assetNode: SCNNode
     var sceneNode: SCNNode
     
     var position: SCNVector3 {
@@ -83,12 +84,17 @@ class SudoNode: Equatable {
     public init(fbNode: FirebaseNode) {
         self.fireBaseNode = fbNode
         self.nodeAssetType = (NodeAssetType(rawValue: fireBaseNode.type.rawValue) ?? NodeAssetType.blueBox)
-        self.sceneNode = self.nodeAssetType.initializeNode()!
+        self.assetNode = self.nodeAssetType.initializeNode()!
+        self.sceneNode = SCNNode()
         self.sceneNode.transform = fbNode.transform
+        self.sceneNode.addChildNode(assetNode)
+        
     }
     
     public init(sceneNode: SCNNode, type: NodeAssetType) {
-        self.sceneNode = sceneNode
+        self.assetNode = sceneNode
+        self.sceneNode = SCNNode()
+        self.sceneNode.addChildNode(assetNode)
         self.nodeAssetType = type
         self.fireBaseNode = FirebaseManager.shared.insertNode(type: type, transform: sceneNode.transform)
     }
