@@ -9,7 +9,7 @@
 import UIKit
 import ARKit
 
-class SudoNode: Equatable {
+class SudoNode {
 
     let nodeAssetType: NodeAssetType
     var fireBaseNode: FirebaseNode
@@ -82,26 +82,35 @@ class SudoNode: Equatable {
     }
     
     public init(fbNode: FirebaseNode) {
-        self.fireBaseNode = fbNode
-        self.nodeAssetType = (NodeAssetType(rawValue: fireBaseNode.type.rawValue) ?? NodeAssetType.blueBox)
-        self.assetNode = self.nodeAssetType.initializeNode()!
-        self.sceneNode = SCNNode()
-        self.sceneNode.transform = fbNode.transform
-        self.sceneNode.addChildNode(assetNode)
+        nodeAssetType = NodeAssetType(rawValue: fbNode.type.rawValue) ?? NodeAssetType.blueBox
+
+        fireBaseNode = fbNode
         
+        assetNode = nodeAssetType.initializeNode()!
+        
+        sceneNode = SCNNode()
+        sceneNode.transform = fbNode.transform
+        sceneNode.addChildNode(assetNode)
     }
     
-    public init(sceneNode: SCNNode, type: NodeAssetType) {
-        self.assetNode = sceneNode
-        self.sceneNode = SCNNode()
-        self.sceneNode.addChildNode(assetNode)
-        self.nodeAssetType = type
-        self.fireBaseNode = FirebaseManager.shared.insertNode(type: type, transform: sceneNode.transform)
+    public init(nodeAssetType: NodeAssetType, nodeInGlobal: SCNMatrix4) {
+        self.nodeAssetType = nodeAssetType
+
+        fireBaseNode = FirebaseManager.shared.insertNode(type: nodeAssetType, transform: nodeInGlobal)
+
+        self.assetNode = nodeAssetType.initializeNode()!
+
+        sceneNode = SCNNode()
+        sceneNode.transform = nodeInGlobal
+        sceneNode.addChildNode(assetNode)
     }
     
     func pushChanges() {
         FirebaseManager.shared.updateNode(node: fireBaseNode)
     }
+}
+
+extension SudoNode: Equatable {
     
     static func ==(lhs: SudoNode, rhs: SudoNode) -> Bool {
         return lhs.id == rhs.id

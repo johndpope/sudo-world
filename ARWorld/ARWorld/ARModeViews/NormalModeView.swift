@@ -27,7 +27,7 @@ class NormalModeView: UIView {
     
     override func awakeFromNib() {
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.itemSize = CGSize.init(width: 100, height: 100)
+        flowLayout.itemSize = CGSize(width: 100, height: 100)
         flowLayout.scrollDirection = .horizontal
         collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
         collectionView.dataSource = self

@@ -18,7 +18,7 @@ protocol FirebaseManagerDelegate: class {
 
 struct FirebaseManager {
 
-    static var shared = FirebaseManager.init()
+    static var shared = FirebaseManager()
     let db: DatabaseReference = Database.database().reference()
 
     static let modelsTableName = "models"
@@ -37,7 +37,7 @@ struct FirebaseManager {
         let key = db.child(FirebaseManager.modelsTableName).childByAutoId().key
         let post = [
             FirebaseManager.modelsTable_typeColumn: type.rawValue,
-            FirebaseManager.modelsTable_transformColumn: FirebaseManager.transformToArray(transform: transform)
+            FirebaseManager.modelsTable_transformColumn: FirebaseManager.transformToArray(transform)
             ] as [String : Any]
         db.child(FirebaseManager.modelsTableName).child(key).setValue(post)
 
@@ -50,7 +50,7 @@ struct FirebaseManager {
 //        db.child(FirebaseManager.modelsTableName)
 //            .child(key)
 //            .child(FirebaseManager.modelsTable_transformColumn)
-//            .setValue(FirebaseManager.transformToArray(transform: transform))
+//            .setValue(FirebaseManager.transformToArray(transform))
 
         return FirebaseNode(id: key, type: type, transform: transform)
     }
@@ -64,7 +64,7 @@ struct FirebaseManager {
         db.child(FirebaseManager.modelsTableName)
             .child(node.id)
             .child(FirebaseManager.modelsTable_transformColumn)
-            .setValue(FirebaseManager.transformToArray(transform: node.transform))
+            .setValue(FirebaseManager.transformToArray(node.transform))
     }
 
     func deleteNode(node: FirebaseNode){
@@ -106,7 +106,7 @@ struct FirebaseManager {
         })
     }
 
-    static func transformToArray(transform: SCNMatrix4) -> Array<Float>{
+    static func transformToArray(_ transform: SCNMatrix4) -> Array<Float>{
         //Ready transform as matrix
         return [
             transform.m11, transform.m12, transform.m13, transform.m14,
@@ -116,7 +116,7 @@ struct FirebaseManager {
         ]
     }
 
-    static func arrayToTransform(transformAsArray: Array<Float>) -> SCNMatrix4{
+    static func arrayToTransform(_ transformAsArray: Array<Float>) -> SCNMatrix4{
         //Ready transform as matrix
         return SCNMatrix4(m11: transformAsArray[0], m12: transformAsArray[1], m13: transformAsArray[2], m14: transformAsArray[3],
                           m21: transformAsArray[4], m22: transformAsArray[5], m23: transformAsArray[6], m24: transformAsArray[7],

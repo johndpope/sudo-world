@@ -16,7 +16,7 @@ struct FirebaseNode {
     init(id: String, type: NodeAssetType, transformAsArray: Array<Float>) {
         self.id = id
         self.type = type
-        self.transform = FirebaseManager.arrayToTransform(transformAsArray: transformAsArray)
+        self.transform = FirebaseManager.arrayToTransform(transformAsArray)
     }
     
     init(id: String, type: NodeAssetType, transform: SCNMatrix4) {

@@ -10,32 +10,6 @@ import Foundation
 import SceneKit
 import ARKit
 
-class GlobalNodeClass: SCNNode {
-    private let calibrationArrowNode = SCNNode()
-    private var calibrationArrowGeometry = SCNBox(width: 0.3, height: 0.03, length: 0.03, chamferRadius: 0.01)
-
-    override init() {
-        super.init()
-        
-        resetCalibrationVisualizer()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func resetCalibrationVisualizer() {
-        calibrationArrowGeometry.firstMaterial = SCNMaterial.material(withDiffuse: UIColor.orange, respondsToLighting: false)
-        calibrationArrowNode.geometry = calibrationArrowGeometry
-        self.addChildNode(calibrationArrowNode)
-    }
-    
-    func setAttachedGeometryWidth(endpointInWorld: SCNVector3, newWidth: Float) {
-        calibrationArrowGeometry.width = CGFloat(newWidth)
-        calibrationArrowNode.position = SCNVector3(x: newWidth / 2, y: 0, z: 0)
-    }
-}
-
 struct NodeCreator {
     static func createAxesNode(quiverLength: CGFloat, quiverThickness: CGFloat) -> SCNNode {
         let quiverThickness = (quiverLength / 50.0) * quiverThickness
@@ -64,13 +38,13 @@ struct NodeCreator {
         return quiverNode
     }
     
-    static var axesBox: SCNNode {
+    static func axesBox() -> SCNNode {
         let box = SCNBox(width: 0.3, height: 0.01, length: 0.01, chamferRadius: 0.01)
         box.materials = [SCNMaterial.material(withDiffuse: UIColor.red, respondsToLighting: false)]
         return SCNNode(geometry: box)
     }
     
-    static var blueBox: SCNNode {
+    static func blueBox() -> SCNNode {
         let box = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)
         box.firstMaterial?.diffuse.contents = UIColor.blue
         
@@ -79,7 +53,7 @@ struct NodeCreator {
         return node
     }
     
-    static var orangeBox: SCNNode {
+    static func orangeBox() -> SCNNode {
         let box = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)
         box.firstMaterial?.diffuse.contents = UIColor.orange
         
@@ -88,7 +62,7 @@ struct NodeCreator {
         return node
     }
     
-    static var greenBox: SCNNode {
+    static func greenBox() -> SCNNode {
         let box = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)
         box.firstMaterial?.diffuse.contents = UIColor.green
         
@@ -96,19 +70,7 @@ struct NodeCreator {
         node.geometry = box
         return node
     }
-    
-    static var editingCircle: SCNNode {
-        let rootNode = SCNScene(named: "art.scnassets/EditingCircle.scn")!.rootNode
-        let circle = rootNode.childNode(withName: "editingCircle", recursively: false)!
-        return circle
-    }
-    
-    static func editingCircleScaledToFit(maxSize: Float) -> SCNNode {
-        let circle = editingCircle
-        circle.scale = SCNVector3.init(maxSize, 0, maxSize)
-        return circle
-    }
-    
+
     static func bluePlane(anchor: ARPlaneAnchor) -> SCNNode {
         let plane = SCNPlane(width: CGFloat(anchor.extent.x), height: CGFloat(anchor.extent.z))
         plane.firstMaterial?.diffuse.contents = #colorLiteral(red: 0, green: 0.7457480216, blue: 1, alpha: 0.3189944402)
@@ -130,7 +92,6 @@ struct NodeCreator {
         return planeNode
     }
     
-    
     static func greenPlane(anchor: ARPlaneAnchor) -> SCNNode {
         let plane = SCNPlane(width: CGFloat(anchor.extent.x), height: CGFloat(anchor.extent.z))
         plane.firstMaterial?.diffuse.contents = #colorLiteral(red: 0.0499236755, green: 0.9352593591, blue: 0.0003146826744, alpha: 0.6324111729)
@@ -142,7 +103,7 @@ struct NodeCreator {
         // Rotate it to match the horizontal orientation of the ARPlaneAnchor.
         planeNode.transform = SCNMatrix4MakeRotation(-Float.pi / 2, 1, 0, 0)
         
-        planeNode.addChildNode(NodeCreator.blueBox)
+        planeNode.addChildNode(NodeCreator.blueBox())
         
         return planeNode
     }

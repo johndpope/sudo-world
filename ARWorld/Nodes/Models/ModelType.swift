@@ -62,7 +62,7 @@ enum NodeAssetType: String {
         case .vase:
             return createNodeFromAsset(assetName: "vase", assetExtension: "dae")
         case .blueBox:
-            return NodeCreator.blueBox
+            return NodeCreator.blueBox()
         case .arjun:
             return createNodeFromAsset(assetName: "arjun/arjun", assetExtension: "dae")
         case .greenBall:
@@ -113,9 +113,3 @@ enum NodeAssetType: String {
         }
     }
 }
-
-struct RootScene {
-    static var shared = RootScene()
-    let rootNode = SCNScene(named: "art.scnassets/ship.scn")!.rootNode
-}
-
