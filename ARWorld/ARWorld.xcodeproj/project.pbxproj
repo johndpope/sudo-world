@@ -10,6 +10,7 @@
 		8575F6FB204350D100F0AF0A /* FirebaseNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8575F6FA204350D100F0AF0A /* FirebaseNode.swift */; };
 		8575F6FD2043560E00F0AF0A /* NodeAnimationCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8575F6FC2043560E00F0AF0A /* NodeAnimationCreator.swift */; };
 		8575F6FF2043581700F0AF0A /* GlobalNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8575F6FE2043581700F0AF0A /* GlobalNode.swift */; };
+		8575F70720437C9700F0AF0A /* ARSCNView+HitTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8575F70620437C9700F0AF0A /* ARSCNView+HitTest.swift */; };
 		85EC36E6202B47E10062DA7C /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EC36E5202B47E10062DA7C /* CalibrationView.swift */; };
 		85EC36E8202B47F30062DA7C /* CalibrationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85EC36E7202B47F30062DA7C /* CalibrationView.xib */; };
 		85EC36EA202B4F570062DA7C /* WaitingForAnchorLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EC36E9202B4F570062DA7C /* WaitingForAnchorLocationView.swift */; };
@@ -45,6 +46,7 @@
 		8575F6FA204350D100F0AF0A /* FirebaseNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseNode.swift; sourceTree = "<group>"; };
 		8575F6FC2043560E00F0AF0A /* NodeAnimationCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeAnimationCreator.swift; sourceTree = "<group>"; };
 		8575F6FE2043581700F0AF0A /* GlobalNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalNode.swift; sourceTree = "<group>"; };
+		8575F70620437C9700F0AF0A /* ARSCNView+HitTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARSCNView+HitTest.swift"; sourceTree = "<group>"; };
 		85EC36E5202B47E10062DA7C /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
 		85EC36E7202B47F30062DA7C /* CalibrationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalibrationView.xib; sourceTree = "<group>"; };
 		85EC36E9202B4F570062DA7C /* WaitingForAnchorLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingForAnchorLocationView.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				8DC4D00C2025ADBD0004B627 /* SCNVector3+Extensions.swift */,
+				8575F70620437C9700F0AF0A /* ARSCNView+HitTest.swift */,
 			);
 			path = 3DUtilities;
 			sourceTree = "<group>";
@@ -152,6 +155,7 @@
 		8575F70420437B5500F0AF0A /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				8DA46C022025210600577308 /* ViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -177,12 +181,12 @@
 		8DA46BF22025210600577308 = {
 			isa = PBXGroup;
 			children = (
-				8DC4CFFF20258DDD0004B627 /* Utilities */,
-				8D7283FE20256F9A0099FAF3 /* Menu */,
+				8DC4CFFF20258DDD0004B627 /* 2DUtilities */,
+				8575F6F72043506700F0AF0A /* 3DUtilities */,
 				8575F7002043584E00F0AF0A /* Nodes */,
-				8DC4D00E2025BD9D0004B627 /* Assets */,
-				8575F6F520434FEA00F0AF0A /* Firebase */,
 				8DA46BFD2025210600577308 /* ARWorld */,
+				8575F6F520434FEA00F0AF0A /* Firebase */,
+				8DC4D00E2025BD9D0004B627 /* Assets */,
 				8DA46BFC2025210600577308 /* Products */,
 				A1A0C0DC31D8C3DF3DD7F7B2 /* Pods */,
 				80A2509B0E48B671C2AEC95F /* Frameworks */,
@@ -200,10 +204,10 @@
 		8DA46BFD2025210600577308 /* ARWorld */ = {
 			isa = PBXGroup;
 			children = (
+				8D7283FE20256F9A0099FAF3 /* Menu */,
 				8575F70420437B5500F0AF0A /* ViewControllers */,
 				8575F6F62043501300F0AF0A /* ARModeViews */,
 				8DA46BFE2025210600577308 /* AppDelegate.swift */,
-				8DA46C022025210600577308 /* ViewController.swift */,
 				8DA46C042025210600577308 /* Main.storyboard */,
 				8DA46C092025210600577308 /* LaunchScreen.storyboard */,
 				8DA46C0C2025210600577308 /* Info.plist */,
@@ -211,15 +215,14 @@
 			path = ARWorld;
 			sourceTree = "<group>";
 		};
-		8DC4CFFF20258DDD0004B627 /* Utilities */ = {
+		8DC4CFFF20258DDD0004B627 /* 2DUtilities */ = {
 			isa = PBXGroup;
 			children = (
-				8575F6F72043506700F0AF0A /* 3DUtilities */,
 				8DC4D00A2025AD8B0004B627 /* Utilities.swift */,
 				85EC36FB202B9EBE0062DA7C /* XibSetup.swift */,
 				9E59129A202C068200CE593D /* Constants.swift */,
 			);
-			path = Utilities;
+			path = 2DUtilities;
 			sourceTree = "<group>";
 		};
 		8DC4D00E2025BD9D0004B627 /* Assets */ = {
@@ -384,6 +387,7 @@
 				8575F6FB204350D100F0AF0A /* FirebaseNode.swift in Sources */,
 				8D7283F820252EF10099FAF3 /* ModelType.swift in Sources */,
 				8D728400202571300099FAF3 /* UIViewExtensions.swift in Sources */,
+				8575F70720437C9700F0AF0A /* ARSCNView+HitTest.swift in Sources */,
 				8DC4D00B2025AD8B0004B627 /* Utilities.swift in Sources */,
 				85EC36E6202B47E10062DA7C /* CalibrationView.swift in Sources */,
 				85EC36F9202B8A250062DA7C /* MenuCollectionViewCell.swift in Sources */,

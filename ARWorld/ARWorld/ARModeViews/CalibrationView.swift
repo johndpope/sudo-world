@@ -61,7 +61,5 @@ class CalibrationView: UIView {
 
     @IBAction func calibrationButtonDonePressed(_ sender: Any) {
         delegate?.calibrationDone()
-    }
-    
-    
+    }    
 }

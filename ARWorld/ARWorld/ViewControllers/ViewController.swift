@@ -18,7 +18,7 @@ enum InteractionMode {
 //    case draggingNewObject
 }
 
-class ViewController: UIViewController, ARSCNViewDelegate {
+class ViewController: UIViewController {
 
     // MARK: - UIViews
     
@@ -53,7 +53,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
     }
     
-    // MARK: - Mode-related Vars
+    // MARK: - Mode-Related Variables
     
     var initialEditingScale: CGFloat = 1
     var previousRotation: CGFloat? = nil
@@ -149,7 +149,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // MARK: - Set Object
     
     private func newSudoNode(assetType: NodeAssetType, worldHitTestAt screenCoordinates: CGPoint) -> SudoNode? {
-        let hit = realWorldHit(at: screenCoordinates)
+        let hit = sceneView.realWorldHit(at: screenCoordinates)
         guard let hitTestInWorld = hit.transformInWorld else { return nil }
         
         let worldInGlobal = SCNMatrix4Invert(globalNode.transform)
@@ -159,7 +159,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     private func setGlobalNode(worldHitTestAt screenCoordinates: CGPoint) {
-        let hit = realWorldHit(at: screenCoordinates)
+        let hit = sceneView.realWorldHit(at: screenCoordinates)
         if let hitTestInWorld = hit.transformInWorld, let plane = hit.planeAnchor {
             globalNode.isHidden = false
             globalNode.transform = hitTestInWorld
@@ -171,7 +171,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     private func handleInitialCalibrationDrag(at screenCoordinates: CGPoint) {
-        if let hitTestInWorld = sceneHitTest(at: screenCoordinates, within: hitTestPlane) {
+        if let hitTestInWorld = sceneView.sceneHitTest(at: screenCoordinates, within: hitTestPlane) {
             let globalNodeInWorld = globalNode.position
 
             let delta = globalNodeInWorld - hitTestInWorld
@@ -180,133 +180,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             globalNode.rotation = SCNVector4(x: 0, y: 1, z: 0, w: -(angleInRadians + Float.pi))
         }
     }
-    
-    // MARK: - Hit Test
-    
-    private func sceneHitTest(at screenPos: CGPoint, within rootNode: SCNNode) -> SCNVector3? {
-        let hits = sceneView.hitTest(screenPos, options: [
-            .boundingBoxOnly: true,
-            .firstFoundOnly: true,
-            .rootNode: rootNode,
-            .ignoreChildNodes: true
-            ])
-        
-        return hits.first?.worldCoordinates
-    }
-    
-    private func realWorldHit(at screenPos: CGPoint) -> (transformInWorld: SCNMatrix4?, planeAnchor: ARPlaneAnchor?, hitAPlane: Bool) {
-        
-        // -------------------------------------------------------------------------------
-        // 1. Always do a hit test against exisiting plane anchors first.
-        //    (If any such anchors exist & only within their extents.)
-        
-        
-        
-        let planeHitTestResults = sceneView.hitTest(screenPos, types: [.existingPlaneUsingExtent]) // .existingPlane will assume a bigger plane (altho not infinite), but it created other problems we saw in hackathon, show us the problems, we will figure if we can do something about it
-        if let result = planeHitTestResults.first {
-            
-//            let planeHitTestPosition = SCNVector3.positionFromTransform(result.worldTransform)
-            let planeAnchor = result.anchor
-            
-            // Return immediately - this is the best possible outcome.
-            return (SCNMatrix4(result.worldTransform), planeAnchor as? ARPlaneAnchor, true)
-        }
-        
-        // -------------------------------------------------------------------------------
-        // 2. Collect more information about the environment by hit testing against
-        //    the feature point cloud, but do not return the result yet.
-        
-        var featureHitTestTransform: SCNMatrix4?
-        var highQualityFeatureHitTestResult = false
-        
-        let highQualityfeatureHitTestResults = sceneView.hitTestWithFeatures(screenPos, coneOpeningAngleInDegrees: 18, minDistance: 0.2, maxDistance: 2.0)
-        
-        if !highQualityfeatureHitTestResults.isEmpty {
-            let result = highQualityfeatureHitTestResults[0]
-            
-            let sketchyResult = SCNMatrix4MakeTranslation(result.position.x, result.position.y, result.position.z)
-            
-            featureHitTestTransform = sketchyResult
-            highQualityFeatureHitTestResult = true
-        }
-        
-        // -------------------------------------------------------------------------------
-        // 4. If available, return the result of the hit test against high quality
-        //    features if the hit tests against infinite planes were skipped or no
-        //    infinite plane was hit.
-        
-        if highQualityFeatureHitTestResult {
-            return (featureHitTestTransform, nil, false)
-        }
-        
-        // _______________________________________________________________________________
-        // 5. If there are no high quality feature points to use, then infer existing position
-        // on the lowest existing plane assuming that is will be the floor.
-        let extendedPlaneHitTestResults = sceneView.hitTest(screenPos, types: [.existingPlane])
-        let sortedResults = extendedPlaneHitTestResults.sorted { (a, b) -> Bool in
-            return a.worldTransform.position.y <= b.worldTransform.position.y ? true : false
-        }
-        if let result = sortedResults.first {
-            let planeAnchor = result.anchor
-            
-            return (SCNMatrix4(result.worldTransform), planeAnchor as? ARPlaneAnchor, true)
-        }
-        
-//        // -------------------------------------------------------------------------------
-//        // 6. As a last resort, perform a second, unfiltered hit test against features.
-//        //    If there are no features in the scene, the result returned here will be nil.
-//
-//        let unfilteredFeatureHitTestResults = sceneView.hitTestWithFeatures(screenPos)
-//        if !unfilteredFeatureHitTestResults.isEmpty {
-//            let result = unfilteredFeatureHitTestResults[0]
-//
-//            let sketchyResult = SCNMatrix4MakeTranslation(result.position.x, result.position.y, result.position.z)
-//
-//            return (sketchyResult, nil, false)
-//        }
-        
-        return (nil, nil, false)
-    }
-        
-    // MARK: - ARSCNViewDelegate
-    
-    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
-        print("didAdd \(node.position)")
 
-        let planeNode = NodeCreator.bluePlane(anchor: planeAnchor)
-        
-        // ARKit owns the node corresponding to the anchor, so make the plane a child node.
-        node.addChildNode(planeNode)
-    }
+    // MARK: - Appending New Nodes
 
-    
-    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-        guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
-
-        // Update size of the geometry associated with Plane nodes
-        if let plane = node.childNodes.first?.geometry as? SCNPlane {
-            plane.updateSize(toMatch: planeAnchor)
-        }
+    private func addToNodesAndGlobalNode(node: SudoNode) {
+        nodes.append(node)
+        globalNode.addChildNode(node.sceneNode)
     }
     
-    func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {//
-        print("didRemove \(node.position)")
-    }
-
-    // calibration finishes
-    func addAllNodesToGlobalNode() {
+    private func addToGlobalNode(nodes: [SudoNode]) {
         for node in nodes {
             globalNode.addChildNode(node.sceneNode)
         }
     }
     
-    private func addNodeToNodes(node: SudoNode) {
-        nodes.append(node)
-        globalNode.addChildNode(node.sceneNode)
-    }
-    
     // MARK: - Session
+    
     private func restartSession() {
         self.sceneView.session.pause()
         self.sceneView.scene.rootNode.enumerateChildNodes { (childNode, _) in
@@ -325,19 +214,46 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
 }
 
+extension ViewController: ARSCNViewDelegate {
+    
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
+        print("didAdd \(node.position)")
+        
+        let planeNode = NodeCreator.bluePlane(anchor: planeAnchor)
+        
+        // ARKit owns the node corresponding to the anchor, so make the plane a child node.
+        node.addChildNode(planeNode)
+    }
+    
+    
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
+        
+        // Update size of the geometry associated with Plane nodes
+        if let plane = node.childNodes.first?.geometry as? SCNPlane {
+            plane.updateSize(toMatch: planeAnchor)
+        }
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {//
+        print("didRemove \(node.position)")
+    }
+}
+
 extension ViewController: FirebaseManagerDelegate {
     
     func didAddNode(node: FirebaseNode) {
         let sudoNode = SudoNode(fbNode: node)
         if !nodes.contains(sudoNode) {
-            addNodeToNodes(node: sudoNode)
+            addToNodesAndGlobalNode(node: sudoNode)
         }
     }
     
     func didChangeNode(node: FirebaseNode) {
         didRemoveNode(id: node.id)
         let newSudoNode = SudoNode(fbNode: node)
-        addNodeToNodes(node: newSudoNode)
+        addToNodesAndGlobalNode(node: newSudoNode)
     }
 
     func didRemoveNode(id: String) {
@@ -353,6 +269,7 @@ extension ViewController: FirebaseManagerDelegate {
 extension ViewController: WaitingForAnchorLocationViewDelegate {
     
     func panGestureBeganOrChanged(screenCoordinates: CGPoint) {
+        print("WaitingForAnchorLocationViewDelegate\(screenCoordinates)")
         setGlobalNode(worldHitTestAt: screenCoordinates)
     }
 }
@@ -360,16 +277,23 @@ extension ViewController: WaitingForAnchorLocationViewDelegate {
 extension ViewController: CalibrationViewDelegate {
     
     func calibrationPanGestureBegan(screenCoordinates: CGPoint) {
+        print("CalibrationViewDelegate began \(screenCoordinates)")
+
         handleInitialCalibrationDrag(at: screenCoordinates)
     }
     
     func calibrationPanGestureChanged(screenCoordinates: CGPoint) {
+        print("CalibrationViewDelegate changed \(screenCoordinates)")
+
         handleInitialCalibrationDrag(at: screenCoordinates)
     }
     
     func calibrationDone() {
         mode = .normal
-        addAllNodesToGlobalNode()
+        
+        // self.nodes are are fetched in viewDidLoad
+        addToGlobalNode(nodes: nodes)
+        
         FirebaseManager.shared.observeOnDelegate(self)
         globalNode.geometry = nil
     }
@@ -397,7 +321,7 @@ extension ViewController: NormalModeViewDelegate {
     func didSelectNewNodeToInsert(assetType: NodeAssetType) {
         let screenCoordinates = CGPoint(x: view.bounds.midX, y: 2 * (view.bounds.height / 3))
         if let newNode = newSudoNode(assetType: assetType, worldHitTestAt: screenCoordinates) {
-            addNodeToNodes(node: newNode)
+            addToNodesAndGlobalNode(node: newNode)
             editingNode = newNode
             mode = .editing
         }
@@ -423,7 +347,7 @@ extension ViewController: NormalModeViewDelegate {
 extension ViewController: EditingModeViewDelegate {
     
     func editPanDidChange(screenCoordinates: CGPoint) {
-        if let hitTestTransformInWorld = realWorldHit(at: screenCoordinates).transformInWorld {
+        if let hitTestTransformInWorld = sceneView.realWorldHit(at: screenCoordinates).transformInWorld {
             let hitTestPositionInWorld = SCNVector3(hitTestTransformInWorld.m41, hitTestTransformInWorld.m42, hitTestTransformInWorld.m43)
             editingNode?.worldPosition = hitTestPositionInWorld
         }
