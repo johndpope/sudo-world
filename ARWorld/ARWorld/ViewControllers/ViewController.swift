@@ -60,6 +60,9 @@ class ViewController: UIViewController {
     var initialEditingScale: CGFloat = 1
     var previousRotation: CGFloat? = nil
     
+    var hitTestPlaneForPanning = SCNNode()
+    var initialNodePosition: SCNVector3? = nil
+    
     var mode: InteractionMode = .waitingForAnchorLocation {
         didSet {
             switch mode {
@@ -353,8 +356,38 @@ extension ViewController: NormalModeViewDelegate {
 }
 
 extension ViewController: EditingModeViewDelegate {
+    // Tap
+    func editTapped(screenCoordinates: CGPoint) {
+        if let hitTestInWorld = sceneView.realWorldHit(at: screenCoordinates).transformInWorld {
+            let hitTestPositionInWorld = SCNVector3(hitTestInWorld.m41, hitTestInWorld.m42, hitTestInWorld.m43)
+            editingNode?.worldPosition = hitTestPositionInWorld
+        }
+    }
+
+    // Pan TODO pan only along a flat plane.
+    func editPanDidBegin(screenCoordinates: CGPoint) {
+//        if let editingNode = editingNode {
+//
+//            // Save the first plane we hit
+//            let plane = SCNPlane(width: 5, height: 5)
+//            plane.firstMaterial?.diffuse.contents = #colorLiteral(red: 0.0499236755, green: 0.9352593591, blue: 0.0003146826744, alpha: 0.6324111729)
+//
+//            let planeNode = SCNNode()
+//            planeNode.geometry = plane
+//            planeNode.worldPosition = editingNode.worldPosition
+//            // SCNPlanes are vertically oriented in their local coordinate space.
+//            // Rotate it to match the horizontal orientation of the ARPlaneAnchor.
+//            planeNode.transform = SCNMatrix4MakeRotation(-Float.pi / 2, 1, 0, 0)
+//            planeNode.addChildNode(NodeCreator.blueBox())
+//            globalNode.addChildNode(planeNode)
+//            hitTestPlaneForPanning = planeNode // TODO: This isn't visible?
+//
+//
+//            // intial node position
+//            initialNodePosition = editingNode.sceneNode.worldPosition
+//        }
+    }
     
-    // Pan
     func editPanDidChange(screenCoordinates: CGPoint) {
         if let hitTestInWorld = sceneView.realWorldHit(at: screenCoordinates).transformInWorld {
             let hitTestPositionInWorld = SCNVector3(hitTestInWorld.m41, hitTestInWorld.m42, hitTestInWorld.m43)
@@ -362,12 +395,16 @@ extension ViewController: EditingModeViewDelegate {
         }
     }
     
+    func editPanDidEnd(screenCoordinates: CGPoint) {
+        initialNodePosition = nil
+    }
+
     // Pinch
     func pinchDidBegin(scale: CGFloat) {
         initialEditingScale = CGFloat(editingNode?.scale.x ?? 1)
         let newScale = initialEditingScale * scale
         editingNode?.scale = SCNVector3(newScale, newScale, newScale)
-         print("scaling with factor \(scale)")
+//         print("PINCH BEGIN with factor \(scale)")
     }
     
     func pinchDidChange(scale: CGFloat) {
@@ -384,25 +421,38 @@ extension ViewController: EditingModeViewDelegate {
     
     // Rotate
     func rotationDidBegin(rotation: CGFloat) {
-        previousRotation = rotation
+//        print("ROTATION BEGIN with rotation \(rotation)")
+
+        if let node = editingNode {
+            node.eulerAngles.setAxis(.y, to: node.eulerAngles.y + Float(rotation) * Constants.Transformation.rotationFactor)
+        }
+        
+//        previousRotation = rotation
     }
     
     func rotationDidChange(rotation: CGFloat) {
-        guard let previousRotation = previousRotation else {
-            return
-        }
+//        guard let previousRotation = previousRotation else {
+//            return
+//        }
         
-        let rotationDelta = rotation - previousRotation
-        print("rotation with angle \(rotationDelta)")
+//        let rotationDelta = rotation - previousRotation
+//        print("rotation with angle \(rotationDelta)")
+//
+//        if let node = editingNode {
+//            node.eulerAngles.setAxis(.y, to: node.eulerAngles.y + Float(rotationDelta) * Constants.Transformation.rotationFactor)
+//        }
+//        self.previousRotation = rotation
+        
+        
         
         if let node = editingNode {
-            node.eulerAngles.setAxis(.y, to: node.eulerAngles.y + Float(rotationDelta) * Constants.Transformation.rotationFactor)
+            node.eulerAngles.setAxis(.y, to: node.eulerAngles.y + Float(rotation))// * Constants.Transformation.rotationFactor)
         }
-        self.previousRotation = rotation
+//        self.previousRotation = rotation
     }
     
     func rotationDidEnd(rotation: CGFloat) {
-        previousRotation = nil
+//        previousRotation = nil
     }
     
     // Buttons

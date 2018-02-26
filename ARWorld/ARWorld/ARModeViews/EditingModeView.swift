@@ -9,8 +9,12 @@
 import UIKit
 
 protocol EditingModeViewDelegate: class {
-    func editPanDidChange(screenCoordinates: CGPoint)
+    func editTapped(screenCoordinates: CGPoint)
     
+    func editPanDidBegin(screenCoordinates: CGPoint)
+    func editPanDidChange(screenCoordinates: CGPoint)
+    func editPanDidEnd(screenCoordinates: CGPoint)
+
     func pinchDidBegin(scale: CGFloat)
     func pinchDidChange(scale: CGFloat)
     func pinchDidEnd(scale: CGFloat)
@@ -54,18 +58,26 @@ extension EditingModeView: ARModeView {
         switch gestureRecognizer.state {
         case .began:
             //            tapGestureRecognizer.isEnabled = false
-//            pinchGestureRecognizer.isEnabled = false
-//            rotationGestureRecognizer.isEnabled = false
-            //            delegate?.editPanDidBegin(screenCoordinates: sender.location(in: view))
+            //            pinchGestureRecognizer.isEnabled = false
+            //            rotationGestureRecognizer.isEnabled = false
+            if gestureRecognizer.numberOfTouches >= 1 {
+                delegate?.editPanDidChange(screenCoordinates: gestureRecognizer.location(ofTouch: 0, in: view))
+            }
             break
         case .changed:
-            delegate?.editPanDidChange(screenCoordinates: gestureRecognizer.location(in: view))
+            if gestureRecognizer.numberOfTouches >= 1 {
+                delegate?.editPanDidChange(screenCoordinates: gestureRecognizer.location(ofTouch: 0, in: view))
+            }
             break
         case .ended, .cancelled:
             //            delegate?.editPanDidEnd(screenCoordinates: sender.location(in: view))
             //            tapGestureRecognizer.isEnabled = true
-//            pinchGestureRecognizer.isEnabled = true
-//            rotationGestureRecognizer.isEnabled = true
+            //            pinchGestureRecognizer.isEnabled = true
+            //            rotationGestureRecognizer.isEnabled = true
+            
+            if gestureRecognizer.numberOfTouches >= 1 {
+                delegate?.editPanDidEnd(screenCoordinates: gestureRecognizer.location(ofTouch: 0, in: view))
+            }
             break
         default:
             break
@@ -73,11 +85,11 @@ extension EditingModeView: ARModeView {
     }
     
     func tapGestureDidChange(_ gestureRecognizer: UITapGestureRecognizer, screenCoordinates: CGPoint) {
-        
+        delegate?.editTapped(screenCoordinates: gestureRecognizer.location(in: view))
     }
     
     func rotationGestureDidChange(_ gestureRecognizer: UIRotationGestureRecognizer) {
-        print("rotation gesture received \(gestureRecognizer.state)")
+        print("rotation gesture received \(gestureRecognizer.state.rawValue)")
         switch gestureRecognizer.state {
         case .began:
             //            tapGestureRecognizer.isEnabled = false
@@ -87,7 +99,10 @@ extension EditingModeView: ARModeView {
             delegate?.rotationDidBegin(rotation: gestureRecognizer.rotation)
             break
         case .changed:
+            
             delegate?.rotationDidChange(rotation: gestureRecognizer.rotation)
+            gestureRecognizer.rotation = 0
+
             break
         case .ended, .cancelled:
             delegate?.rotationDidEnd(rotation: gestureRecognizer.rotation)
@@ -101,7 +116,7 @@ extension EditingModeView: ARModeView {
     }
     
     func pinchGestureDidChange(_ gestureRecognizer: UIPinchGestureRecognizer) {
-        print("pinch gesture recieved \(gestureRecognizer.state)")
+        print("pinch gesture recieved \(gestureRecognizer.state.rawValue) \(gestureRecognizer.location(in: self))")
         switch gestureRecognizer.state {
         case .began:
             //            tapGestureRecognizer.isEnabled = false

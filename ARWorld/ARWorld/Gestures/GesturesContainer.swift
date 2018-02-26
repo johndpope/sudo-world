@@ -22,19 +22,23 @@ class GesturesContainer: UIView {
     
     init() {
         super.init(frame: CGRect.zero)
-                
-        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-        addGestureRecognizer(panRecognizer)
-        
+
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         addGestureRecognizer(tapRecognizer)
+        
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+        panRecognizer.delegate = self
+        panRecognizer.require(toFail: tapRecognizer)
+        addGestureRecognizer(panRecognizer)        
 
         let rotationRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(handleRotation))
         rotationRecognizer.delegate = self
+        rotationRecognizer.require(toFail: tapRecognizer)
         addGestureRecognizer(rotationRecognizer)
 
         let pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch))
         pinchRecognizer.delegate = self
+        pinchRecognizer.require(toFail: tapRecognizer)
         addGestureRecognizer(pinchRecognizer)
     }
     
@@ -80,7 +84,9 @@ class GesturesContainer: UIView {
 
 extension GesturesContainer: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return gestureRecognizer is UIRotationGestureRecognizer && otherGestureRecognizer is UIPinchGestureRecognizer
+        return true
+        
+//        return gestureRecognizer is UIRotationGestureRecognizer && otherGestureRecognizer is UIPinchGestureRecognizer
     }
 }
 
