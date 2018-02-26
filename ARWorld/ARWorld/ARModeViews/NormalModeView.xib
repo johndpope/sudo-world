@@ -16,26 +16,36 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1WX-Sb-Lsq">
-                    <rect key="frame" x="162" y="597" width="50" height="50"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1WX-Sb-Lsq">
+                    <rect key="frame" x="162" y="617" width="50" height="50"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="50" id="AMn-RL-YcL"/>
                         <constraint firstAttribute="width" constant="50" id="aOY-yU-5L9"/>
                     </constraints>
+                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="30"/>
+                    <state key="normal" title="+">
+                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
                     <connections>
                         <action selector="newNodeButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="D70-Ea-DJh"/>
                     </connections>
                 </button>
-                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eJi-uT-t9h">
+                <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eJi-uT-t9h">
                     <rect key="frame" x="0.0" y="492" width="375" height="175"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FY7-09-9Ny">
-                            <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                        <imageView userInteractionEnabled="NO" alpha="0.59999999999999998" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="gridBG" translatesAutoresizingMaskIntoConstraints="NO" id="X9D-1p-3ml">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="175"/>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FY7-09-9Ny">
+                            <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="30" id="hdO-vX-uep"/>
-                                <constraint firstAttribute="width" constant="30" id="ycL-pT-Mid"/>
+                                <constraint firstAttribute="height" constant="40" id="hdO-vX-uep"/>
+                                <constraint firstAttribute="width" constant="40" id="ycL-pT-Mid"/>
                             </constraints>
-                            <state key="normal" title="X"/>
+                            <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="20"/>
+                            <state key="normal" title="X">
+                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
                             <connections>
                                 <action selector="closeNodeMenuPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="0v6-O0-Jlp"/>
                             </connections>
@@ -44,15 +54,19 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="175" id="562-eu-SrV"/>
+                        <constraint firstItem="X9D-1p-3ml" firstAttribute="leading" secondItem="eJi-uT-t9h" secondAttribute="leading" id="IGa-4d-C3N"/>
                         <constraint firstItem="FY7-09-9Ny" firstAttribute="top" secondItem="eJi-uT-t9h" secondAttribute="top" id="L5y-Te-KXw"/>
                         <constraint firstItem="FY7-09-9Ny" firstAttribute="leading" secondItem="eJi-uT-t9h" secondAttribute="leading" id="aWR-Rw-hQa"/>
+                        <constraint firstItem="X9D-1p-3ml" firstAttribute="top" secondItem="eJi-uT-t9h" secondAttribute="top" id="ave-C3-3Qp"/>
+                        <constraint firstAttribute="trailing" secondItem="X9D-1p-3ml" secondAttribute="trailing" id="c8A-1t-pou"/>
+                        <constraint firstAttribute="bottom" secondItem="X9D-1p-3ml" secondAttribute="bottom" id="kkp-6h-QdU"/>
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fLq-xr-pgR">
-                    <rect key="frame" x="309" y="20" width="50" height="50"/>
+                    <rect key="frame" x="319" y="20" width="40" height="40"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="50" id="Dtx-0s-wrv"/>
-                        <constraint firstAttribute="width" constant="50" id="siC-7d-z9e"/>
+                        <constraint firstAttribute="height" constant="40" id="Dtx-0s-wrv"/>
+                        <constraint firstAttribute="width" constant="40" id="siC-7d-z9e"/>
                     </constraints>
                     <state key="normal" title="Button" image="reset-icon"/>
                     <connections>
@@ -63,10 +77,9 @@
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <gestureRecognizers/>
             <constraints>
-                <constraint firstItem="eJi-uT-t9h" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="5fc-TN-p55"/>
                 <constraint firstItem="fLq-xr-pgR" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="c4Y-f4-GdF"/>
                 <constraint firstItem="eJi-uT-t9h" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="gE1-TR-DX5"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="1WX-Sb-Lsq" secondAttribute="bottom" constant="20" id="jnI-Qh-T4N"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="1WX-Sb-Lsq" secondAttribute="bottom" id="jnI-Qh-T4N"/>
                 <constraint firstItem="eJi-uT-t9h" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="plU-lR-TIN"/>
                 <constraint firstItem="1WX-Sb-Lsq" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="skd-sI-7by"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="fLq-xr-pgR" secondAttribute="trailing" constant="16" id="yzJ-Af-7XR"/>
@@ -81,6 +94,7 @@
         </view>
     </objects>
     <resources>
+        <image name="gridBG" width="236" height="188"/>
         <image name="reset-icon" width="277" height="277"/>
     </resources>
 </document>

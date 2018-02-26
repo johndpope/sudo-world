@@ -10,20 +10,21 @@ import UIKit
 
 class MenuCollectionViewCell: UICollectionViewCell {
 
-    
-    @IBOutlet weak var iamgeView: UIImageView!
+    @IBOutlet weak var imageView: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
         self.addCornerRadius()
-        self.addTopHighlight()
-        self.addGrayDiagonalShading()
-        self.addBottomShadow()
     }
     
     func config(image: UIImage) {
-        self.iamgeView.image = image
+        imageView.image = image
+        imageView.contentMode = .scaleAspectFill
+        
+//        if imageView.layer.sublayers == nil {
+//            imageView.addTopHighlight()
+//            imageView.addGrayDiagonalShading()
+//            imageView.addBottomShadow()
+//        }
     }
-
 }

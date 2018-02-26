@@ -24,25 +24,16 @@
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lFG-ki-0fC">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </arscnView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xz0-Bz-Ffn">
-                                <rect key="frame" x="0.0" y="44" width="375" height="734"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="Xz0-Bz-Ffn" secondAttribute="trailing" id="BcO-T3-ChH"/>
-                            <constraint firstItem="Xz0-Bz-Ffn" firstAttribute="top" secondItem="QxG-Za-ZOF" secondAttribute="bottom" id="CMh-kV-x7K"/>
                             <constraint firstAttribute="bottom" secondItem="lFG-ki-0fC" secondAttribute="bottom" id="Fk2-JD-XHK"/>
-                            <constraint firstItem="T4x-E7-a9t" firstAttribute="top" secondItem="Xz0-Bz-Ffn" secondAttribute="bottom" id="RLb-7I-RPS"/>
                             <constraint firstItem="lFG-ki-0fC" firstAttribute="leading" secondItem="nui-qi-li0" secondAttribute="leading" id="Tu6-cR-NBu"/>
                             <constraint firstAttribute="trailing" secondItem="lFG-ki-0fC" secondAttribute="trailing" id="op9-rD-mM9"/>
                             <constraint firstItem="lFG-ki-0fC" firstAttribute="top" secondItem="nui-qi-li0" secondAttribute="top" id="x28-qr-ztS"/>
-                            <constraint firstItem="Xz0-Bz-Ffn" firstAttribute="leading" secondItem="nui-qi-li0" secondAttribute="leading" id="xQy-M8-6uG"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="modeViewContainer" destination="Xz0-Bz-Ffn" id="DZS-H5-umE"/>
                         <outlet property="sceneView" destination="lFG-ki-0fC" id="ZUz-GL-cO9"/>
                     </connections>
                 </viewController>

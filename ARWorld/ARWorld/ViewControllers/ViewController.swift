@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     // MARK: - UIViews
     
     @IBOutlet var sceneView: ARSCNView!
-    @IBOutlet weak var modeViewContainer: UIView!
+    var modeViewContainer = UIView()
 
     // MARK: - Nodes in the scene
     
@@ -96,6 +96,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configSceneView(sceneView: sceneView)
+
+        view.addSubview(modeViewContainer)
+        modeViewContainer.constrainEdges(to: view)
         
         FirebaseManager.shared.getCurrentDatabase { fbNodes in
             if let fbNodes = fbNodes {
@@ -143,7 +146,8 @@ class ViewController: UIViewController {
         for view in modeViewContainer.subviews {
             view.removeFromSuperview()
         }
-        self.modeViewContainer.addSubview(view)
+        modeViewContainer.addSubview(view)
+        view.constrainEdges(to: modeViewContainer)
     }
     
     // MARK: - Set Object

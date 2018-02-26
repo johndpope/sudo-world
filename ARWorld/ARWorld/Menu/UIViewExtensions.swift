@@ -18,7 +18,8 @@ extension UIView {
     }
     
     func addGrayDiagonalShading() {
-        let topLeftColor = UIColor.black.withAlphaComponent(0.3)
+        let greenTint = #colorLiteral(red: 0.2510820436, green: 1, blue: 0.8285764853, alpha: 1)
+        let topLeftColor = greenTint.withAlphaComponent(0.3)
         let bottomRightColor = UIColor.white.withAlphaComponent(0)
         
         let gradient = CAGradientLayer()
@@ -30,7 +31,7 @@ extension UIView {
     }
     
     func addTopHighlight() {
-        let topColor = UIColor.white.withAlphaComponent(1).cgColor
+        let topColor = UIColor.white.withAlphaComponent(0.8).cgColor
         let bottomColor = UIColor.white.withAlphaComponent(0).cgColor
         let height: CGFloat = 12
         
@@ -55,77 +56,3 @@ extension UIView {
         self.layer.insertSublayer(gradient, at: 0)
     }
 }
-
-
-
-
-//
-//class OldCarouselCell<ItemCell: UICollectionViewCell>: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource where ItemCell: OldCarouselItemCell {
-//    private var collectionViewHeightConstraint: NSLayoutConstraint!
-//    fileprivate var collectionView: UICollectionView!
-//    fileprivate var storedOffsets = [Int: CGFloat]()
-//    fileprivate var models: [ItemCell.Model] = []
-//    fileprivate var didSelectCell: ((IndexPath) -> Void)?
-//
-//    // If nothing is showing up, make sure collectionHeight is greater than item height
-//    // If you're using nibs, set width and height on the nib
-//    fileprivate var collectionHeight: CGFloat = 170 {
-//        didSet {
-//            collectionViewHeightConstraint.constant = collectionHeight
-//        }
-//    }
-//
-//    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-//        super.init(style: style, reuseIdentifier: reuseIdentifier)
-//
-//        collectionView = createCollectionView()
-//        collectionView.delegate = self
-//        collectionView.dataSource = self
-//
-//        contentView.addSubview(collectionView)
-//        collectionView.constrainToSuperView()
-//
-//        collectionViewHeightConstraint = collectionView.heightAnchor.activateConstraint(equalToConstant: collectionHeight, priority: 999)
-//
-//        if ItemCell.hasNib() {
-//            collectionView.register(UINib(nibName: String(describing: ItemCell.self), bundle: nil), forCellWithReuseIdentifier: ItemCell.reuseId())
-//        } else {
-//            collectionView.register(ItemCell.self, forCellWithReuseIdentifier: ItemCell.reuseId())
-//        }
-//    }
-//
-//    required init?(coder aDecoder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//
-//    private func createCollectionView() -> UICollectionView {
-//        let layout = UICollectionViewFlowLayout()
-//        layout.scrollDirection = .horizontal
-//        layout.estimatedItemSize = CGSize(width: 80, height: 80) // An arbitary number smaller than collectionView height
-//
-//        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-//        collectionView.backgroundColor = .white
-//        collectionView.showsHorizontalScrollIndicator = false
-//
-//        return collectionView
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return models.count
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ItemCell.reuseId(), for: indexPath) as? ItemCell {
-//            let model = models[indexPath.row]
-//            cell.configure(model: model)
-//            cell.tag = indexPath.row
-//            return cell
-//        }
-//        return ItemCell()
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        self.didSelectCell?(indexPath)
-//    }
-//}
-

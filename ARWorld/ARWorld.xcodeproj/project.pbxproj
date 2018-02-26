@@ -11,6 +11,10 @@
 		8575F6FD2043560E00F0AF0A /* NodeAnimationCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8575F6FC2043560E00F0AF0A /* NodeAnimationCreator.swift */; };
 		8575F6FF2043581700F0AF0A /* GlobalNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8575F6FE2043581700F0AF0A /* GlobalNode.swift */; };
 		8575F70720437C9700F0AF0A /* ARSCNView+HitTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8575F70620437C9700F0AF0A /* ARSCNView+HitTest.swift */; };
+		8575F70D2043937C00F0AF0A /* Constrainable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8575F7092043937C00F0AF0A /* Constrainable.swift */; };
+		8575F70E2043937C00F0AF0A /* Constraints+Activation+Priority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8575F70A2043937C00F0AF0A /* Constraints+Activation+Priority.swift */; };
+		8575F70F2043937C00F0AF0A /* NibView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8575F70B2043937C00F0AF0A /* NibView.swift */; };
+		8575F7102043937C00F0AF0A /* UIView+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8575F70C2043937C00F0AF0A /* UIView+Constraints.swift */; };
 		85EC36E6202B47E10062DA7C /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EC36E5202B47E10062DA7C /* CalibrationView.swift */; };
 		85EC36E8202B47F30062DA7C /* CalibrationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85EC36E7202B47F30062DA7C /* CalibrationView.xib */; };
 		85EC36EA202B4F570062DA7C /* WaitingForAnchorLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EC36E9202B4F570062DA7C /* WaitingForAnchorLocationView.swift */; };
@@ -32,7 +36,7 @@
 		8DA46C082025210600577308 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DA46C072025210600577308 /* Assets.xcassets */; };
 		8DA46C0B2025210600577308 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DA46C092025210600577308 /* LaunchScreen.storyboard */; };
 		8DC4CFFE20257FB40004B627 /* NodeCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC4CFFD20257FB40004B627 /* NodeCreator.swift */; };
-		8DC4D00B2025AD8B0004B627 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC4D00A2025AD8B0004B627 /* Utilities.swift */; };
+		8DC4D00B2025AD8B0004B627 /* 3DUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC4D00A2025AD8B0004B627 /* 3DUtilities.swift */; };
 		8DC4D00D2025ADBD0004B627 /* SCNVector3+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC4D00C2025ADBD0004B627 /* SCNVector3+Extensions.swift */; };
 		9E59129B202C068200CE593D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E59129A202C068200CE593D /* Constants.swift */; };
 		A7368FCF2025309D00BDC162 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A7368FCE2025309D00BDC162 /* GoogleService-Info.plist */; };
@@ -47,6 +51,10 @@
 		8575F6FC2043560E00F0AF0A /* NodeAnimationCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeAnimationCreator.swift; sourceTree = "<group>"; };
 		8575F6FE2043581700F0AF0A /* GlobalNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalNode.swift; sourceTree = "<group>"; };
 		8575F70620437C9700F0AF0A /* ARSCNView+HitTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARSCNView+HitTest.swift"; sourceTree = "<group>"; };
+		8575F7092043937C00F0AF0A /* Constrainable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constrainable.swift; sourceTree = "<group>"; };
+		8575F70A2043937C00F0AF0A /* Constraints+Activation+Priority.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Constraints+Activation+Priority.swift"; sourceTree = "<group>"; };
+		8575F70B2043937C00F0AF0A /* NibView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibView.swift; sourceTree = "<group>"; };
+		8575F70C2043937C00F0AF0A /* UIView+Constraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Constraints.swift"; sourceTree = "<group>"; };
 		85EC36E5202B47E10062DA7C /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
 		85EC36E7202B47F30062DA7C /* CalibrationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalibrationView.xib; sourceTree = "<group>"; };
 		85EC36E9202B4F570062DA7C /* WaitingForAnchorLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingForAnchorLocationView.swift; sourceTree = "<group>"; };
@@ -70,7 +78,7 @@
 		8DA46C0A2025210600577308 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8DA46C0C2025210600577308 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC4CFFD20257FB40004B627 /* NodeCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeCreator.swift; sourceTree = "<group>"; };
-		8DC4D00A2025AD8B0004B627 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		8DC4D00A2025AD8B0004B627 /* 3DUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = 3DUtilities.swift; sourceTree = "<group>"; };
 		8DC4D00C2025ADBD0004B627 /* SCNVector3+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SCNVector3+Extensions.swift"; sourceTree = "<group>"; };
 		9E59129A202C068200CE593D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A7368FCE2025309D00BDC162 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -126,6 +134,7 @@
 		8575F6F72043506700F0AF0A /* 3DUtilities */ = {
 			isa = PBXGroup;
 			children = (
+				8DC4D00A2025AD8B0004B627 /* 3DUtilities.swift */,
 				8DC4D00C2025ADBD0004B627 /* SCNVector3+Extensions.swift */,
 				8575F70620437C9700F0AF0A /* ARSCNView+HitTest.swift */,
 			);
@@ -158,6 +167,17 @@
 				8DA46C022025210600577308 /* ViewController.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		8575F7082043937C00F0AF0A /* Autolayout */ = {
+			isa = PBXGroup;
+			children = (
+				8575F7092043937C00F0AF0A /* Constrainable.swift */,
+				8575F70A2043937C00F0AF0A /* Constraints+Activation+Priority.swift */,
+				8575F70B2043937C00F0AF0A /* NibView.swift */,
+				8575F70C2043937C00F0AF0A /* UIView+Constraints.swift */,
+			);
+			path = Autolayout;
 			sourceTree = "<group>";
 		};
 		8D7283F92025306A0099FAF3 /* Models */ = {
@@ -218,7 +238,7 @@
 		8DC4CFFF20258DDD0004B627 /* 2DUtilities */ = {
 			isa = PBXGroup;
 			children = (
-				8DC4D00A2025AD8B0004B627 /* Utilities.swift */,
+				8575F7082043937C00F0AF0A /* Autolayout */,
 				85EC36FB202B9EBE0062DA7C /* XibSetup.swift */,
 				9E59129A202C068200CE593D /* Constants.swift */,
 			);
@@ -383,23 +403,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8575F70D2043937C00F0AF0A /* Constrainable.swift in Sources */,
 				8575F6FD2043560E00F0AF0A /* NodeAnimationCreator.swift in Sources */,
 				8575F6FB204350D100F0AF0A /* FirebaseNode.swift in Sources */,
 				8D7283F820252EF10099FAF3 /* ModelType.swift in Sources */,
 				8D728400202571300099FAF3 /* UIViewExtensions.swift in Sources */,
 				8575F70720437C9700F0AF0A /* ARSCNView+HitTest.swift in Sources */,
-				8DC4D00B2025AD8B0004B627 /* Utilities.swift in Sources */,
+				8DC4D00B2025AD8B0004B627 /* 3DUtilities.swift in Sources */,
 				85EC36E6202B47E10062DA7C /* CalibrationView.swift in Sources */,
 				85EC36F9202B8A250062DA7C /* MenuCollectionViewCell.swift in Sources */,
 				9E59129B202C068200CE593D /* Constants.swift in Sources */,
+				8575F70E2043937C00F0AF0A /* Constraints+Activation+Priority.swift in Sources */,
 				85EC36F0202B51FC0062DA7C /* NormalModeView.swift in Sources */,
 				85EC36EA202B4F570062DA7C /* WaitingForAnchorLocationView.swift in Sources */,
 				8DC4D00D2025ADBD0004B627 /* SCNVector3+Extensions.swift in Sources */,
 				8DC4CFFE20257FB40004B627 /* NodeCreator.swift in Sources */,
+				8575F7102043937C00F0AF0A /* UIView+Constraints.swift in Sources */,
 				85EC36FE202CACF70062DA7C /* SudoNode.swift in Sources */,
 				8575F6FF2043581700F0AF0A /* GlobalNode.swift in Sources */,
 				85EC36F4202B667A0062DA7C /* EditingModeView.swift in Sources */,
 				A7368FD120253DC800BDC162 /* FirebaseManager.swift in Sources */,
+				8575F70F2043937C00F0AF0A /* NibView.swift in Sources */,
 				85EC36FC202B9EBE0062DA7C /* XibSetup.swift in Sources */,
 				8DA46C032025210600577308 /* ViewController.swift in Sources */,
 				8DA46BFF2025210600577308 /* AppDelegate.swift in Sources */,

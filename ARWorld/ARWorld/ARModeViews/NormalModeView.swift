@@ -26,6 +26,10 @@ class NormalModeView: UIView {
     var collectionView: UICollectionView!
     
     override func awakeFromNib() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
+        tapGesture.cancelsTouchesInView = false
+        self.addGestureRecognizer(tapGesture)
+        
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.itemSize = CGSize(width: 100, height: 100)
         flowLayout.scrollDirection = .horizontal
@@ -33,16 +37,15 @@ class NormalModeView: UIView {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(UINib(nibName: String(describing: MenuCollectionViewCell.self), bundle: nil), forCellWithReuseIdentifier: String(describing: MenuCollectionViewCell.self))
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .clear
         nodeMenuCollectionViewContainer.addSubview(collectionView)
-
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
-        tapGesture.cancelsTouchesInView = false
-        self.addGestureRecognizer(tapGesture)
         
-    }
-    
-    override func layoutSubviews() {
-        collectionView.frame = CGRect(x: bounds.minX, y: closeMenuButton.bounds.maxY, width: bounds.width, height: nodeMenuCollectionViewContainer.bounds.height - closeMenuButton.bounds.height)
+        nodeMenuCollectionViewContainer.constrainBottom(to: self)
+        
+        collectionView.constrainTopToBottom(of: closeMenuButton)
+        collectionView.constrainBottom(to: self, offset: 30)
+        collectionView.constrainEdgesHorizontally(to: nodeMenuCollectionViewContainer)
     }
 
     @objc func handleTapGesture(_ sender: UITapGestureRecognizer) {
@@ -53,7 +56,6 @@ class NormalModeView: UIView {
     @IBAction func newNodeButtonPressed(_ sender: UIButton) {
         newNodeButton.isHidden = true
         nodeMenuCollectionViewContainer.isHidden = false
-//        nodeMen?uCollectionView.reloadData()
     }
     
     @IBAction func closeNodeMenuPressed(_ sender: UIButton) {

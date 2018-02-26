@@ -14,18 +14,14 @@ class GlobalNode: SCNNode {
     
     override init() {
         super.init()
+        calibrationArrowGeometry.firstMaterial = SCNMaterial.material(withDiffuse: UIColor.orange, respondsToLighting: false)
+        calibrationArrowNode.geometry = calibrationArrowGeometry
         
-        resetCalibrationVisualizer()
+        addChildNode(calibrationArrowNode)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func resetCalibrationVisualizer() {
-        calibrationArrowGeometry.firstMaterial = SCNMaterial.material(withDiffuse: UIColor.orange, respondsToLighting: false)
-        calibrationArrowNode.geometry = calibrationArrowGeometry
-        self.addChildNode(calibrationArrowNode)
     }
     
     func setCalibrationArrowWidth(_ newWidth: Float) {
