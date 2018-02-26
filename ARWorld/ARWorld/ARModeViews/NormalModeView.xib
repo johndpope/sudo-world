@@ -30,7 +30,7 @@
                         <action selector="newNodeButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="D70-Ea-DJh"/>
                     </connections>
                 </button>
-                <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eJi-uT-t9h">
+                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eJi-uT-t9h">
                     <rect key="frame" x="0.0" y="492" width="375" height="175"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" alpha="0.59999999999999998" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="gridBG" translatesAutoresizingMaskIntoConstraints="NO" id="X9D-1p-3ml">

@@ -53,15 +53,6 @@ struct NodeCreator {
         return node
     }
     
-    static func orangeBox() -> SCNNode {
-        let box = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)
-        box.firstMaterial?.diffuse.contents = UIColor.orange
-        
-        let node = SCNNode()
-        node.geometry = box
-        return node
-    }
-    
     static func greenBox() -> SCNNode {
         let box = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)
         box.firstMaterial?.diffuse.contents = UIColor.green

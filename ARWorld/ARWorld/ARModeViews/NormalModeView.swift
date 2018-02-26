@@ -24,6 +24,8 @@ class NormalModeView: UIView {
     weak var delegate: NormalModeViewDelegate?
     
     var collectionView: UICollectionView!
+    private var menuBottomConstraint: NSLayoutConstraint!
+    private let menuHeight: CGFloat = 175
     
     override func awakeFromNib() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
@@ -41,11 +43,11 @@ class NormalModeView: UIView {
         collectionView.backgroundColor = .clear
         nodeMenuCollectionViewContainer.addSubview(collectionView)
         
-        nodeMenuCollectionViewContainer.constrainBottom(to: self)
+        menuBottomConstraint = nodeMenuCollectionViewContainer.constrainBottom(to: self, offset: menuHeight)
         
         collectionView.constrainTopToBottom(of: closeMenuButton)
-        collectionView.constrainBottom(to: self, offset: 30)
-        collectionView.constrainEdgesHorizontally(to: nodeMenuCollectionViewContainer)
+        collectionView.constrainBottom(to: nodeMenuCollectionViewContainer, offset: -30)
+        collectionView.constrainEdgesHorizontally(to: self)
     }
 
     @objc func handleTapGesture(_ sender: UITapGestureRecognizer) {
@@ -55,12 +57,20 @@ class NormalModeView: UIView {
     
     @IBAction func newNodeButtonPressed(_ sender: UIButton) {
         newNodeButton.isHidden = true
-        nodeMenuCollectionViewContainer.isHidden = false
+        
+        self.menuBottomConstraint.constant = 0.0
+        UIView.animate(withDuration: 0.4) {
+            self.layoutIfNeeded()
+        }
     }
     
     @IBAction func closeNodeMenuPressed(_ sender: UIButton) {
         newNodeButton.isHidden = false
-        nodeMenuCollectionViewContainer.isHidden = true
+        
+        self.menuBottomConstraint.constant = self.menuHeight
+        UIView.animate(withDuration: 0.4) {
+            self.layoutIfNeeded()
+        }
     }
     
     @IBAction func resetButtonPressed(_ sender: UIButton) {
