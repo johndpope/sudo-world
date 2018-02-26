@@ -9,13 +9,6 @@
 import UIKit
 
 extension UIView {
-    /// Helper method to init and setup the view from the Nib.
-    func xibSetup() {
-        let view = loadFromNib()
-        addSubview(view)
-        stretch(view: view)
-    }
-    
     /// Method to init the view from a Nib.
     ///
     /// - Returns: Optional UIView initialized from the Nib of the same class name.
@@ -31,15 +24,7 @@ extension UIView {
         
         return view
     }
-    
-    /// Stretches the input view to the UIView frame using Auto-layout
-    ///
-    /// - Parameter view: The view to stretch.
-    func stretch(view: UIView) {
-        view.frame = self.bounds
-    }
-    
-    
+
     /// - Returns: Optional UIView initialized from the Nib of the same class name.
     static func initFromNib<T: UIView>() -> T {
         let nibName = String(describing: self)

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol NormalModeViewDelegate: class {
-    func didRecieveTap(screenLocation: CGPoint)
+    func selectSudoNodeForEditing(screenCoordinates: CGPoint)
     func resetRequested()
     func didSelectNewNodeToInsert(assetType: NodeAssetType)
 }
@@ -28,10 +28,6 @@ class NormalModeView: UIView {
     private let menuHeight: CGFloat = 175
     
     override func awakeFromNib() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
-        tapGesture.cancelsTouchesInView = false
-        self.addGestureRecognizer(tapGesture)
-        
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.itemSize = CGSize(width: 100, height: 100)
         flowLayout.scrollDirection = .horizontal
@@ -48,11 +44,6 @@ class NormalModeView: UIView {
         collectionView.constrainTopToBottom(of: closeMenuButton)
         collectionView.constrainBottom(to: nodeMenuCollectionViewContainer, offset: -30)
         collectionView.constrainEdgesHorizontally(to: self)
-    }
-
-    @objc func handleTapGesture(_ sender: UITapGestureRecognizer) {
-        print("Normal tap gesture recieved ")
-        delegate?.didRecieveTap(screenLocation: sender.location(in: self.view))
     }
     
     @IBAction func newNodeButtonPressed(_ sender: UIButton) {
@@ -102,3 +93,14 @@ extension NormalModeView: UICollectionViewDataSource, UICollectionViewDelegate {
     }
 }
 
+extension NormalModeView: ARModeView {
+    func panGestureDidChange(_ gestureRecognizer: UIPanGestureRecognizer, screenCoordinates: CGPoint) {}
+    
+    func tapGestureDidChange(_ gestureRecognizer: UITapGestureRecognizer, screenCoordinates: CGPoint) {
+        delegate?.selectSudoNodeForEditing(screenCoordinates: screenCoordinates)
+    }
+    
+    func rotationGestureDidChange(_ gestureRecognizer: UIRotationGestureRecognizer) {}
+    
+    func pinchGestureDidChange(_ gestureRecognizer: UIPinchGestureRecognizer) {}
+}

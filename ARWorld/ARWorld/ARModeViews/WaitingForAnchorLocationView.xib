@@ -33,14 +33,8 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="view" destination="-1" id="ydu-TE-hre"/>
-                <outletCollection property="gestureRecognizers" destination="H0K-k3-B19" appends="YES" id="oJc-mG-e0U"/>
             </connections>
         </view>
-        <panGestureRecognizer minimumNumberOfTouches="1" id="H0K-k3-B19">
-            <connections>
-                <action selector="handlePagGesture:" destination="iN0-l3-epB" id="NHe-p8-IAE"/>
-            </connections>
-        </panGestureRecognizer>
     </objects>
     <resources>
         <image name="Image" width="256" height="256"/>

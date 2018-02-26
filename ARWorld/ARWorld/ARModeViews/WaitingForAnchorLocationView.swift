@@ -9,11 +9,7 @@
 import UIKit
 
 protocol WaitingForAnchorLocationViewDelegate: class {
-    func panGestureBeganOrChanged(screenCoordinates: CGPoint)
-}
-
-extension WaitingForAnchorLocationViewDelegate {
-    func panGestureBeganOrChanged(screenCoordinates: CGPoint) {}
+    func setGlobalNode(worldHitTestAt: CGPoint)
 }
 
 class WaitingForAnchorLocationView: UIView {
@@ -21,21 +17,19 @@ class WaitingForAnchorLocationView: UIView {
     @IBOutlet weak var view: UIView!
     
     weak var delegate: WaitingForAnchorLocationViewDelegate?
-    
-//    required init?(coder aDecoder: NSCoder) {
-//        super.init(coder: aDecoder)
-//
-//        let _ = Bundle.main.loadNibNamed(String(describing: WaitingForAnchorLocationView.self), owner: self, options: nil)![0] as! UIView
-//        self.view.frame = self.bounds
-//        self.addSubview(self.view)
-//    }
+}
 
-    @IBAction func handlePagGesture(_ sender: UIPanGestureRecognizer) {
-        switch sender.state {
-        case .began, .changed:
-            delegate?.panGestureBeganOrChanged(screenCoordinates: sender.location(in: view))
-        default:
-            break
-        }
+extension WaitingForAnchorLocationView: ARModeView {
+    func panGestureDidChange(_ gestureRecognizer: UIPanGestureRecognizer, screenCoordinates: CGPoint) {
+        delegate?.setGlobalNode(worldHitTestAt: screenCoordinates)
+    }
+    
+    func tapGestureDidChange(_ gestureRecognizer: UITapGestureRecognizer, screenCoordinates: CGPoint) {
+    }
+    
+    func rotationGestureDidChange(_ gestureRecognizer: UIRotationGestureRecognizer) {
+    }
+    
+    func pinchGestureDidChange(_ gestureRecognizer: UIPinchGestureRecognizer) {
     }
 }

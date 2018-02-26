@@ -35,16 +35,6 @@
                 <constraint firstItem="ant-5Z-Saa" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="MwY-Ss-BdD"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <connections>
-                <outlet property="panGestureRecognizer" destination="mvI-GI-TbN" id="7P6-xz-KzP"/>
-                <outlet property="view" destination="-1" id="uI3-Xw-adU"/>
-                <outletCollection property="gestureRecognizers" destination="mvI-GI-TbN" appends="YES" id="P8H-eZ-pNN"/>
-            </connections>
         </view>
-        <panGestureRecognizer minimumNumberOfTouches="1" id="mvI-GI-TbN">
-            <connections>
-                <action selector="handlePanGesture:" destination="iN0-l3-epB" id="Qbn-IK-iRn"/>
-            </connections>
-        </panGestureRecognizer>
     </objects>
 </document>

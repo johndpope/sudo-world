@@ -9,41 +9,27 @@
 import UIKit
 
 protocol EditingModeViewDelegate: class {
-    func didTap(screenCoordinates: CGPoint)
-    func editPanDidBegin(screenCoordinates: CGPoint)
     func editPanDidChange(screenCoordinates: CGPoint)
-    func editPanDidEnd(screenCoordinates: CGPoint)
+    
     func pinchDidBegin(scale: CGFloat)
     func pinchDidChange(scale: CGFloat)
     func pinchDidEnd(scale: CGFloat)
+    
     func rotationDidBegin(rotation: CGFloat)
     func rotationDidChange(rotation: CGFloat)
     func rotationDidEnd(rotation: CGFloat)
+    
     func doneButtonPressed()
     func trashButtonPressed()
-}
-
-extension EditingModeViewDelegate {
-    func didTap(screenCoordinates: CGPoint) {}
-    func editPanDidBegin(screenCoordinates: CGPoint) {}
-    func editPanDidChange(screenCoordinates: CGPoint) {}
-    func editPanDidEnd(screenCoordinates: CGPoint) {}
-    func pinchDidBegin(scale: CGFloat) {}
-    func pinchDidChange(scale: CGFloat) {}
-    func pinchDidEnd(scale: CGFloat) {}
-    func rotationDidBegin(rotation: CGFloat) {}
-    func rotationDidChange(rotation: CGFloat) {}
-    func rotationDidEnd(rotation: CGFloat) {}
 }
 
 class EditingModeView: UIView {
 
     @IBOutlet weak var view: UIView!
-    @IBOutlet weak var rotationGestureRecognizer: UIRotationGestureRecognizer!
-    @IBOutlet weak var pinchGestureRecognizer: UIPinchGestureRecognizer!
-    @IBOutlet weak var panGestureRecognizer: UIPanGestureRecognizer!
-    @IBOutlet weak var tapGestureRecognizer: UITapGestureRecognizer!
-    
+//    @IBOutlet weak var rotationGestureRecognizer: UIRotationGestureRecognizer!
+//    @IBOutlet weak var pinchGestureRecognizer: UIPinchGestureRecognizer!
+//    @IBOutlet weak var panGestureRecognizer: UIPanGestureRecognizer!
+//    @IBOutlet weak var tapGestureRecognizer: UITapGestureRecognizer!
     
     weak var delegate: EditingModeViewDelegate?
     
@@ -57,76 +43,83 @@ class EditingModeView: UIView {
         delegate?.trashButtonPressed()
     }
     
-    @IBAction func handleTap(_ sender: UITapGestureRecognizer) {
-        delegate?.didTap(screenCoordinates: sender.location(in: view))
-    }
+//    @IBAction func handleTap(_ sender: UITapGestureRecognizer) {
+//        delegate?.didTap(screenCoordinates: sender.location(in: view))
+//    }
     
-    @IBAction func handleRotationGesture(_ sender: UIRotationGestureRecognizer) {
-        print("rotation gesture received")
-        switch sender.state {
+}
+
+extension EditingModeView: ARModeView {
+    func panGestureDidChange(_ gestureRecognizer: UIPanGestureRecognizer, screenCoordinates: CGPoint) {
+        switch gestureRecognizer.state {
         case .began:
-            tapGestureRecognizer.isEnabled = false
+            //            tapGestureRecognizer.isEnabled = false
 //            pinchGestureRecognizer.isEnabled = false
-            panGestureRecognizer.isEnabled = false
-            previousRotation = sender.rotation
-            delegate?.rotationDidBegin(rotation: sender.rotation)
-            break
-        case .changed:
-            delegate?.rotationDidChange(rotation: sender.rotation)
-            break
-        case .ended, .cancelled:
-            delegate?.rotationDidEnd(rotation: sender.rotation)
-            tapGestureRecognizer.isEnabled = true
-//            pinchGestureRecognizer.isEnabled = true
-            panGestureRecognizer.isEnabled = true
-            break
-        default:
-            break
-        }
-    }
-    
-    @IBAction func handlePinchGesture(_ sender: UIPinchGestureRecognizer) {
-        switch sender.state {
-        case .began:
-            tapGestureRecognizer.isEnabled = false
 //            rotationGestureRecognizer.isEnabled = false
-            panGestureRecognizer.isEnabled = false
-            delegate?.pinchDidBegin(scale: sender.scale)
+            //            delegate?.editPanDidBegin(screenCoordinates: sender.location(in: view))
             break
         case .changed:
-            delegate?.pinchDidChange(scale: sender.scale)
+            delegate?.editPanDidChange(screenCoordinates: gestureRecognizer.location(in: view))
             break
         case .ended, .cancelled:
-            delegate?.pinchDidEnd(scale: sender.scale)
-            tapGestureRecognizer.isEnabled = true
+            //            delegate?.editPanDidEnd(screenCoordinates: sender.location(in: view))
+            //            tapGestureRecognizer.isEnabled = true
+//            pinchGestureRecognizer.isEnabled = true
 //            rotationGestureRecognizer.isEnabled = true
-            panGestureRecognizer.isEnabled = true
             break
         default:
             break
         }
     }
     
-    @IBAction func handlePan(_ sender: UIPanGestureRecognizer) {
-        switch sender.state {
+    func tapGestureDidChange(_ gestureRecognizer: UITapGestureRecognizer, screenCoordinates: CGPoint) {
+        
+    }
+    
+    func rotationGestureDidChange(_ gestureRecognizer: UIRotationGestureRecognizer) {
+        print("rotation gesture received \(gestureRecognizer.state)")
+        switch gestureRecognizer.state {
         case .began:
-            tapGestureRecognizer.isEnabled = false
-            pinchGestureRecognizer.isEnabled = false
-            rotationGestureRecognizer.isEnabled = false
-            delegate?.editPanDidBegin(screenCoordinates: sender.location(in: view))
+            //            tapGestureRecognizer.isEnabled = false
+            //            pinchGestureRecognizer.isEnabled = false
+            //            panGestureRecognizer.isEnabled = false
+            previousRotation = gestureRecognizer.rotation
+            delegate?.rotationDidBegin(rotation: gestureRecognizer.rotation)
             break
         case .changed:
-            delegate?.editPanDidChange(screenCoordinates: sender.location(in: view))
+            delegate?.rotationDidChange(rotation: gestureRecognizer.rotation)
             break
         case .ended, .cancelled:
-            delegate?.editPanDidEnd(screenCoordinates: sender.location(in: view))
-            tapGestureRecognizer.isEnabled = true
-            pinchGestureRecognizer.isEnabled = true
-            rotationGestureRecognizer.isEnabled = true
+            delegate?.rotationDidEnd(rotation: gestureRecognizer.rotation)
+            //            tapGestureRecognizer.isEnabled = true
+            //            pinchGestureRecognizer.isEnabled = true
+            //            panGestureRecognizer.isEnabled = true
             break
         default:
             break
         }
     }
     
+    func pinchGestureDidChange(_ gestureRecognizer: UIPinchGestureRecognizer) {
+        print("pinch gesture recieved \(gestureRecognizer.state)")
+        switch gestureRecognizer.state {
+        case .began:
+            //            tapGestureRecognizer.isEnabled = false
+            //            rotationGestureRecognizer.isEnabled = false
+            //            panGestureRecognizer.isEnabled = false
+            delegate?.pinchDidBegin(scale: gestureRecognizer.scale)
+            break
+        case .changed:
+            delegate?.pinchDidChange(scale: gestureRecognizer.scale)
+            break
+        case .ended, .cancelled:
+            delegate?.pinchDidEnd(scale: gestureRecognizer.scale)
+            //            tapGestureRecognizer.isEnabled = true
+            //            rotationGestureRecognizer.isEnabled = true
+            //            panGestureRecognizer.isEnabled = true
+            break
+        default:
+            break
+        }
+    }
 }
